@@ -1,13 +1,12 @@
-﻿namespace LLMForum.Server.Models
+﻿using LLMForum.Server.Models;
+
+namespace LLMForum.Server.Dtos.User
 {
-    public class User
+    public class UserDto
     {
         public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
-        public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; }
-        public List<Question> Questions { get; set; }
     }
 }
-

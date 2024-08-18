@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
 using LLMForum.Server.Data;
+using LLMForum.Server.Interfaces;
+using LLMForum.Server.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
