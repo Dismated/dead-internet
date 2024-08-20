@@ -3,15 +3,19 @@ using Microsoft.EntityFrameworkCore;
 using LLMForum.Server.Data;
 using LLMForum.Server.Interfaces;
 using LLMForum.Server.Repository;
+using Microsoft.SemanticKernel;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+#pragma warning disable SKEXP0010
+builder.Services.AddKernel();
+builder.Services.AddOpenAIChatCompletion(modelId: "bartowski/Phi-3.1-mini-4k-instruct-GGUF",
+    apiKey: "lm-studio",
+    endpoint: new Uri("http://localhost:1234/v1/chat/completions"));
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
@@ -20,6 +24,24 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
+
+app.Use(async (context, next) =>
+{
+    var serviceProvider = context.RequestServices;
+    var services = serviceProvider.GetService<IServiceCollection>();
+
+    if (services != null)
+    {
+        foreach (var service in services)
+        {
+            Console.WriteLine($"Service: {service.ServiceType.FullName}, Lifetime: {service.Lifetime}");
+        }
+    }
+
+    await next();
+});
+
+
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -38,5 +60,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
+
+
+
 
 app.Run();

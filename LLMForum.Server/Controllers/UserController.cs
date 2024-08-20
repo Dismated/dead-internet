@@ -2,7 +2,6 @@
 using LLMForum.Server.Data;
 using LLMForum.Server.Mappers;
 using LLMForum.Server.Dtos.User;
-using Microsoft.EntityFrameworkCore;
 using LLMForum.Server.Interfaces;
 
 namespace LLMForum.Server.Controllers

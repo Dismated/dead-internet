@@ -21,6 +21,7 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.SemanticKernel" Version="1.17.1" />
+		<PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.17.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
 	</ItemGroup>
 
@@ -28,6 +29,10 @@
 		<ProjectReference Include="..\llmforum.client\llmforum.client.esproj">
 			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
 		</ProjectReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="AIServices\" />
 	</ItemGroup>
 
 </Project>
