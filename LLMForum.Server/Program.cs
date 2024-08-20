@@ -25,20 +25,12 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
-app.Use(async (context, next) =>
+// Configure the HTTP request pipeline.
+app.UseCors(options =>
 {
-    var serviceProvider = context.RequestServices;
-    var services = serviceProvider.GetService<IServiceCollection>();
-
-    if (services != null)
-    {
-        foreach (var service in services)
-        {
-            Console.WriteLine($"Service: {service.ServiceType.FullName}, Lifetime: {service.Lifetime}");
-        }
-    }
-
-    await next();
+    options.AllowAnyOrigin();
+    options.AllowAnyMethod();
+    options.AllowAnyHeader();
 });
 
 
