@@ -5,12 +5,18 @@ using Microsoft.SemanticKernel;
 [Route("api/[controller]")]
 public class AIController : ControllerBase
 {
-    public AIController() { }
+    private readonly Kernel _kernel;
+    public AIController(Kernel kernel) { _kernel = kernel; }
 
-    [HttpGet(Name = "GetAI")]
-    public async Task<IActionResult> Get(Kernel kernel)
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] AiPrompt prompt)
     {
-        var result = await kernel.InvokePromptAsync<string>("hello");
-        return Ok(result);
+        var result = await _kernel.InvokePromptAsync<string>(prompt.Text);
+        return Ok(new { Message = "hello", Result = result });
+    }
+
+    public class AiPrompt
+    {
+        public string Text { get; set; }
     }
 }
