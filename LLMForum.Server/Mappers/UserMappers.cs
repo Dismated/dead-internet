@@ -18,7 +18,6 @@ namespace LLMForum.Server.Mappers
 
         public static User ToUserFromCreateDTO(this CreateUserRequestDto userDto)
         {
-
             return new User
             {
                 Username = userDto.Username,

@@ -7,6 +7,6 @@
         public string Description { get; set; }
         public bool IsActive { get; set; }
         public int Votes { get; set; }
-        public List<Answer> Answers { get; set; }
+        public List<Post> Answers { get; set; }
     }
 }
