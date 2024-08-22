@@ -1,32 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './App.css';
 
 
 function App() {
-    const [userText, setUserText] = useState('start');
-    const [aiResponse, setAiResponse] = useState('');
+    const [userText, setUserText] = useState('hello');
+    const [aiResponse, setAiResponse] = useState([]);
 
-    useEffect(() => {
-        (async () => {
-            const response = await fetch('https://localhost:7201/api/AI', {
+    const handleKeyDown = async (event: { key: string; }) => {
+        if (event.key === 'Enter') {
+            const response = await fetch('https://localhost:7201/api/Comment', {
                 method: 'POST', // Specify the request method
                 headers: {
                     'Content-Type': 'application/json', // Specify the content type
                 },
-                body: JSON.stringify({ Text: userText })
+                body: JSON.stringify({ UserPrompt: userText, PostId: 1 })
             })
             const json = await response.json()
+            setAiResponse(json.comments)
+        }
+    }
 
-            console.log(json, response)
-            setAiResponse(json.result)
-        })();
 
-    }, [userText])
 
     return (
         <div>
-            <input type="text" value={userText} onChange={(e) => setUserText(e.target.value)} />
-            <p >{aiResponse}</p>
+            <input type="text" value={userText} onChange={(e) => setUserText(e.target.value)} onKeyDown={handleKeyDown} />
+            {aiResponse.map((x: { content: string; }, i) => <div key={i}>{"----".repeat(i) + ' '}{x.content}</div>)}
         </div>
     );
 
