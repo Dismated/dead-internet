@@ -28,7 +28,7 @@ namespace LLMForum.Server.Controllers
             return Ok(userDtos);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var user = await _userRepo.GetByIdAsync(id);
@@ -48,7 +48,7 @@ namespace LLMForum.Server.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateUserRequestDto updateDto)
         {
             var userModel = await _userRepo.UpdateAsync(id, updateDto);
@@ -61,7 +61,7 @@ namespace LLMForum.Server.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var userModel = await _userRepo.DeleteAsync(id);

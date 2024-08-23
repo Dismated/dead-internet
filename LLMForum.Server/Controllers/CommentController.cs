@@ -33,8 +33,6 @@ public class CommentController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateCommentRequestDto commentDto)
     {
-        Console.WriteLine(commentDto);
-        if (!await _postRepo.PostExists(commentDto.PostId)) return BadRequest("Post does not exist");
         var aiComments = await _commentRepo.GenerateCommentAsync(commentDto);
 
         var savedComments = new List<CommentDto>();

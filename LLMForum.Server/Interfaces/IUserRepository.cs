@@ -5,10 +5,10 @@ namespace LLMForum.Server.Interfaces
 {
     public interface IUserRepository
     {
-        Task<List<User>> GetAllAsync();
-        Task<User?> GetByIdAsync(int id);
-        Task<User> CreateAsync(User userModel);
-        Task<User?> UpdateAsync(int id, UpdateUserRequestDto userDto);
-        Task<User?> DeleteAsync(int id);
+        Task<List<AppUser>> GetAllAsync();
+        Task<AppUser?> GetByIdAsync(int id);
+        Task<AppUser> CreateAsync(AppUser userModel);
+        Task<AppUser?> UpdateAsync(int id, UpdateUserRequestDto userDto);
+        Task<AppUser?> DeleteAsync(int id);
     }
 }

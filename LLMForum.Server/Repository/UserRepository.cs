@@ -14,19 +14,19 @@ namespace LLMForum.Server.Repository
         {
             _context = context;
         }
-        public async Task<List<User>> GetAllAsync()
+        public async Task<List<AppUser>> GetAllAsync()
         {
 
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<User?> GetByIdAsync(int id)
+        public async Task<AppUser?> GetByIdAsync(int id)
         {
             return await _context.Users.FindAsync(id);
 
         }
 
-        public async Task<User?> UpdateAsync(int id, UpdateUserRequestDto userDto)
+        public async Task<AppUser?> UpdateAsync(int id, UpdateUserRequestDto userDto)
         {
             var existingUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -34,7 +34,6 @@ namespace LLMForum.Server.Repository
             {
                 return null;
             }
-            existingUser.Username = userDto.Username;
             existingUser.Email = userDto.Email;
             existingUser.PasswordHash = userDto.PasswordHash;
 
@@ -44,14 +43,14 @@ namespace LLMForum.Server.Repository
         }
 
 
-        public async Task<User> CreateAsync(User userModel)
+        public async Task<AppUser> CreateAsync(AppUser userModel)
         {
             await _context.Users.AddAsync(userModel);
             await _context.SaveChangesAsync();
             return userModel;
         }
 
-        public async Task<User?> DeleteAsync(int id)
+        public async Task<AppUser?> DeleteAsync(int id)
         {
             var userModel = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if (userModel == null)
