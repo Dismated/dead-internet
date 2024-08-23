@@ -42,3 +42,5 @@ namespace LLMForum.Server.Services
             return tokenHandler.WriteToken(token);
         }
     }
+}
+

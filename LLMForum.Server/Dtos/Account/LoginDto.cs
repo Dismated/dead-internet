@@ -1,4 +1,6 @@
-﻿namespace LLMForum.Server.Dtos.Account
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LLMForum.Server.Dtos.Account
 {
     public class LoginDto
     {

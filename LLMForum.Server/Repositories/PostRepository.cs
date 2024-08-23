@@ -6,14 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LLMForum.Server.Repository
 {
-    public class PostRepository : IPostRepository
+    public class PostRepository(ApplicationDBContext context) : IPostRepository
     {
-        private readonly ApplicationDBContext _context;
-
-        public PostRepository(ApplicationDBContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDBContext _context = context;
 
         public async Task<List<Post>> GetAllAsync()
         {

@@ -8,17 +8,11 @@ using Microsoft.EntityFrameworkCore;
 namespace LLMForum.Server.Controllers
 {
     [Route("api/account")]
-    public class AccountController : ControllerBase
+    public class AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager) : ControllerBase
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly ITokenService _tokenService;
-        private readonly SignInManager<AppUser> _signInManager;
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
-        {
-            _userManager = userManager;
-            _tokenService = tokenService;
-            _signInManager = signInManager;
-        }
+        private readonly UserManager<AppUser> _userManager = userManager;
+        private readonly ITokenService _tokenService = tokenService;
+        private readonly SignInManager<AppUser> _signInManager = signInManager;
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LLMForum.Server.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240823101512_SeedRole")]
-    partial class SeedRole
+    [Migration("20240823145128_changedPostNav")]
+    partial class changedPostNav
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,6 +161,10 @@ namespace LLMForum.Server.Migrations
                     b.Property<int?>("AIPersonalityId")
                         .HasColumnType("int");
 
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -168,18 +172,11 @@ namespace LLMForum.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AIPersonalityId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("Posts");
                 });
@@ -213,13 +210,13 @@ namespace LLMForum.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5b01e89a-b1f8-46f8-adac-387d84c0659f",
+                            Id = "2d177337-30d7-48d1-8d78-af7c53578fed",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "2e69f2f6-e038-4fcf-84cf-881a1885ebb2",
+                            Id = "8cf750c3-7b54-44ce-a091-78331933f545",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -354,13 +351,13 @@ namespace LLMForum.Server.Migrations
                         .WithMany("Answers")
                         .HasForeignKey("AIPersonalityId");
 
-                    b.HasOne("LLMForum.Server.Models.AppUser", "User")
+                    b.HasOne("LLMForum.Server.Models.AppUser", "AppUser")
                         .WithMany("Posts")
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

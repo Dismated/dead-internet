@@ -7,17 +7,13 @@ using LLMForum.Server.Mappers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CommentController : ControllerBase
+public class CommentController(Kernel kernel, IPostRepository postRepo, ICommentRepository commentRepo, ILLMService ILLMService, ICommentService commentService) : ControllerBase
 {
-    private readonly Kernel _kernel;
-    private readonly IPostRepository _postRepo;
-    private readonly ICommentRepository _commentRepo;
-    public CommentController(Kernel kernel, IPostRepository postRepo, ICommentRepository commentRepo)
-    {
-        _kernel = kernel;
-        _postRepo = postRepo;
-        _commentRepo = commentRepo;
-    }
+    private readonly Kernel _kernel = kernel;
+    private readonly IPostRepository _postRepo = postRepo;
+    private readonly ICommentRepository _commentRepo = commentRepo;
+    private readonly ILLMService _ILLMService = ILLMService;
+    private readonly ICommentService _commentService = commentService;
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
@@ -33,16 +29,7 @@ public class CommentController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateCommentRequestDto commentDto)
     {
-        var aiComments = await _commentRepo.GenerateCommentAsync(commentDto);
-
-        var savedComments = new List<CommentDto>();
-        foreach (var comment in aiComments)
-        {
-            var parentCommentId = savedComments.LastOrDefault()?.Id;
-            var commentModel = commentDto.ToCommentFromCreateDTO(comment, parentCommentId);
-            await _commentRepo.CreateAsync(commentModel);
-            savedComments.Add(commentModel.ToCommentDto());
-        }
+        var savedComments = await _commentService.CreateComments(commentDto);
 
         var response = new
         {

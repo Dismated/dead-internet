@@ -6,6 +6,5 @@ namespace LLMForum.Server.Interfaces
     {
         Task<Comment?> GetByIdAsync(int id);
         Task<Comment> CreateAsync(Comment commentDto);
-        Task<List<string>> GenerateCommentAsync(CreateCommentRequestDto commentDto);
     }
 }

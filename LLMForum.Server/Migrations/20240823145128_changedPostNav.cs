@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace LLMForum.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class changedPostNav : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -181,8 +183,7 @@ namespace LLMForum.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AIPersonalityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -194,8 +195,8 @@ namespace LLMForum.Server.Migrations
                         principalTable: "AIPersonalities",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Posts_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Posts_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -226,6 +227,15 @@ namespace LLMForum.Server.Migrations
                         principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "2d177337-30d7-48d1-8d78-af7c53578fed", null, "Admin", "ADMIN" },
+                    { "8cf750c3-7b54-44ce-a091-78331933f545", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -283,9 +293,9 @@ namespace LLMForum.Server.Migrations
                 column: "AIPersonalityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_UserId1",
+                name: "IX_Posts_AppUserId",
                 table: "Posts",
-                column: "UserId1");
+                column: "AppUserId");
         }
 
         /// <inheritdoc />

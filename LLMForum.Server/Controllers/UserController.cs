@@ -8,16 +8,10 @@ namespace LLMForum.Server.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController(ApplicationDBContext context, IUserRepository userRepo) : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
-        private readonly IUserRepository _userRepo;
-        public UserController(ApplicationDBContext context, IUserRepository userRepo)
-
-        {
-            _userRepo = userRepo;
-            _context = context;
-        }
+        private readonly ApplicationDBContext _context = context;
+        private readonly IUserRepository _userRepo = userRepo;
 
         [HttpGet]
         public async Task<IActionResult> GetAll()

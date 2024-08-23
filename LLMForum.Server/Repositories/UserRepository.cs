@@ -6,14 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LLMForum.Server.Repository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(ApplicationDBContext context) : IUserRepository
     {
-        private readonly ApplicationDBContext _context;
+        private readonly ApplicationDBContext _context = context;
 
-        public UserRepository(ApplicationDBContext context)
-        {
-            _context = context;
-        }
         public async Task<List<AppUser>> GetAllAsync()
         {
 
