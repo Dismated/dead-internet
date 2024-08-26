@@ -1,6 +1,0 @@
-@LLMForum.Server_HostAddress = http://localhost:5063
-
-GET {{LLMForum.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
