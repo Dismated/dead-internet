@@ -1,10 +1,10 @@
 ﻿using LLMForum.Server.Models;
 
-namespace LLMForum.Server.Dtos.User
+namespace LLMForum.Server.Dtos.AppUser
 {
-    public class UserDto
+    public class AppUserDto
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public DateTime CreatedAt { get; set; }

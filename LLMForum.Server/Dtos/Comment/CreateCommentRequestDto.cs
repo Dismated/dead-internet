@@ -4,8 +4,6 @@
     {
         public string UserPrompt { get; set; }
 
-        public int PostId { get; set; }
-
+        public string PostId { get; set; }
     }
-
 }

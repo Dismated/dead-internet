@@ -1,28 +1,26 @@
 ﻿using LLMForum.Server.Data;
-using LLMForum.Server.Dtos.User;
+using LLMForum.Server.Dtos.AppUser;
 using LLMForum.Server.Interfaces;
 using LLMForum.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LLMForum.Server.Repository
 {
-    public class UserRepository(ApplicationDBContext context) : IUserRepository
+    public class UserRepository(ApplicationDBContext context) : IAppUserRepository
     {
         private readonly ApplicationDBContext _context = context;
 
         public async Task<List<AppUser>> GetAllAsync()
         {
-
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<AppUser?> GetByIdAsync(int id)
+        public async Task<AppUser?> GetByIdAsync(string id)
         {
             return await _context.Users.FindAsync(id);
-
         }
 
-        public async Task<AppUser?> UpdateAsync(int id, UpdateUserRequestDto userDto)
+        public async Task<AppUser?> UpdateAsync(string id, UpdateAppUserRequestDto userDto)
         {
             var existingUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -35,9 +33,7 @@ namespace LLMForum.Server.Repository
 
             await _context.SaveChangesAsync();
             return existingUser;
-
         }
-
 
         public async Task<AppUser> CreateAsync(AppUser userModel)
         {
@@ -46,7 +42,7 @@ namespace LLMForum.Server.Repository
             return userModel;
         }
 
-        public async Task<AppUser?> DeleteAsync(int id)
+        public async Task<AppUser?> DeleteAsync(string id)
         {
             var userModel = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if (userModel == null)
@@ -58,5 +54,4 @@ namespace LLMForum.Server.Repository
             return userModel;
         }
     }
-
 }

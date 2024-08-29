@@ -1,18 +1,18 @@
 ﻿using LLMForum.Server.Dtos.Comment;
 using LLMForum.Server.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using LLMForum.Server.Mappers;
-
+using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CommentController(ICommentRepository commentRepo, ICommentService commentService) : ControllerBase
+public class CommentController(ICommentRepository commentRepo, ICommentService commentService)
+    : ControllerBase
 {
     private readonly ICommentRepository _commentRepo = commentRepo;
     private readonly ICommentService _commentService = commentService;
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] int id)
+    public async Task<IActionResult> GetById([FromRoute] string id)
     {
         var comment = await _commentRepo.GetByIdAsync(id);
         if (comment == null)
@@ -30,12 +30,9 @@ public class CommentController(ICommentRepository commentRepo, ICommentService c
         var response = new
         {
             Comments = savedComments,
-            Message = $"Successfully created {savedComments.Count} comments"
+            Message = $"Successfully created {savedComments.Count} comments",
         };
-
 
         return CreatedAtAction(nameof(GetById), new { id = savedComments[0].Id }, response);
     }
-
-
 }

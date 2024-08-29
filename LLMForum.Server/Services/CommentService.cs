@@ -4,7 +4,8 @@ using LLMForum.Server.Mappers;
 
 namespace LLMForum.Server.Services
 {
-    public class CommentService(ICommentRepository commentRepo, ILLMService LLMService) : ICommentService
+    public class CommentService(ICommentRepository commentRepo, ILLMService LLMService)
+        : ICommentService
     {
         private readonly ICommentRepository _commentRepo = commentRepo;
         private readonly ILLMService _LLMService = LLMService;

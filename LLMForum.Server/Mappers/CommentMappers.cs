@@ -14,16 +14,20 @@ namespace LLMForum.Server.Mappers
                 CreatedAt = commentModel.CreatedAt,
                 PostId = commentModel.PostId,
                 ParentCommentId = commentModel.ParentCommentId,
-
             };
         }
-        public static Comment ToCommentFromCreateDTO(this CreateCommentRequestDto commentDto, string comment, int? parentCommentId)
+
+        public static Comment ToCommentFromCreateDTO(
+            this CreateCommentRequestDto commentDto,
+            string comment,
+            string? parentCommentId
+        )
         {
             return new Comment
             {
                 Content = comment,
                 PostId = commentDto.PostId,
-                ParentCommentId = parentCommentId
+                ParentCommentId = parentCommentId,
             };
         }
     }

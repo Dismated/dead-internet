@@ -3,6 +3,5 @@
     public class CreatePostRequestDto
     {
         public string Title { get; set; }
-
     }
 }

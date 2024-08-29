@@ -8,20 +8,16 @@ namespace LLMForum.Server.Repository
     {
         private readonly ApplicationDBContext _context = context;
 
-        public async Task<Comment?> GetByIdAsync(int id)
+        public async Task<Comment?> GetByIdAsync(string id)
         {
             return await _context.Comments.FindAsync(id);
-
         }
 
         public async Task<Comment> CreateAsync(Comment commentModel)
         {
-
             await _context.Comments.AddAsync(commentModel);
             await _context.SaveChangesAsync();
             return commentModel;
         }
-
-
     }
 }

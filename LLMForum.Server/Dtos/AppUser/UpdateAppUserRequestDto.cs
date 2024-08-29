@@ -1,6 +1,6 @@
-﻿namespace LLMForum.Server.Dtos.User
+﻿namespace LLMForum.Server.Dtos.AppUser
 {
-    public class UpdateUserRequestDto
+    public class UpdateAppUserRequestDto
     {
         public string Username { get; set; }
         public string Email { get; set; }

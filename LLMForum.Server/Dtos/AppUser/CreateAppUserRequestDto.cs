@@ -1,10 +1,9 @@
-﻿namespace LLMForum.Server.Dtos.User
+﻿namespace LLMForum.Server.Dtos.AppUser
 {
-    public class CreateUserRequestDto
+    public class CreateAppUserRequestDto
     {
         public string Username { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
     }
-
 }

@@ -20,7 +20,8 @@ namespace LLMForum.Server.Services
                 {
                     result.Add(AIResult);
                     changingPrompt += $"/n AI Comment: {AIResult}";
-                };
+                }
+                ;
             }
             result.RemoveAt(0);
             return result;

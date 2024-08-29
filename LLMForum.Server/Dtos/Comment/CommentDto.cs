@@ -2,10 +2,10 @@
 {
     public class CommentDto
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
-        public int? ParentCommentId { get; set; }
-        public int PostId { get; set; }
+        public string? ParentCommentId { get; set; }
+        public string PostId { get; set; }
     }
 }

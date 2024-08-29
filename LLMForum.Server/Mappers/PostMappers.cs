@@ -11,16 +11,13 @@ namespace LLMForum.Server.Mappers
             {
                 Id = postModel.Id,
                 Title = postModel.Title,
-                CreatedAt = postModel.CreatedAt
+                CreatedAt = postModel.CreatedAt,
             };
         }
+
         public static Post ToPostFromCreateDTO(this CreatePostRequestDto postDto)
         {
-            return new Post
-            {
-                Title = postDto.Title,
-            };
+            return new Post { Title = postDto.Title };
         }
     }
 }
-
