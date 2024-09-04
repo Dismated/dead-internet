@@ -1,9 +1,17 @@
-﻿namespace LLMForum.Server.Dtos.AppUser
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LLMForum.Server.Dtos.AppUser
 {
     public class CreateAppUserRequestDto
     {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
+        [Required]
+        public string Username { get; init; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; init; } = string.Empty;
+
+        [Required]
+        public string PasswordHash { get; init; } = string.Empty;
     }
 }

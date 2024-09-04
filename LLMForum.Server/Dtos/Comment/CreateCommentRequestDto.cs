@@ -1,9 +1,13 @@
-﻿namespace LLMForum.Server.Dtos.Comment
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LLMForum.Server.Dtos.Comment
 {
     public class CreateCommentRequestDto
     {
-        public string UserPrompt { get; set; } = String.Empty;
+        [Required]
+        public string UserPrompt { get; init; } = String.Empty;
 
-        public string PostId { get; set; } = String.Empty;
+        [Required]
+        public string PostId { get; init; } = String.Empty;
     }
 }

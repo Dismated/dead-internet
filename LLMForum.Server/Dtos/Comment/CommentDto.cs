@@ -1,11 +1,20 @@
-﻿namespace LLMForum.Server.Dtos.Comment
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LLMForum.Server.Dtos.Comment
 {
     public class CommentDto
     {
-        public string Id { get; set; }
-        public string Content { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string? ParentCommentId { get; set; }
-        public string PostId { get; set; }
+        [Required]
+        public string Id { get; init; } = string.Empty;
+
+        [Required]
+        public string Content { get; init; } = string.Empty;
+
+        [Required]
+        public DateTime CreatedAt { get; init; }
+        public string? ParentCommentId { get; init; }
+
+        [Required]
+        public string PostId { get; init; } = string.Empty;
     }
 }

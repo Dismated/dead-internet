@@ -5,9 +5,9 @@ namespace LLMForum.Server.Dtos.Account
     public class LoginDto
     {
         [Required]
-        public string Username { get; set; }
+        public string Username { get; init; } = string.Empty;
 
         [Required]
-        public string Password { get; set; }
+        public string Password { get; init; } = string.Empty;
     }
 }

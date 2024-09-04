@@ -1,12 +1,18 @@
-﻿using LLMForum.Server.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LLMForum.Server.Dtos.AppUser
 {
     public class AppUserDto
     {
-        public string Id { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public DateTime CreatedAt { get; set; }
+        [Required]
+        public string Id { get; init; } = string.Empty;
+
+        [Required]
+        public string Username { get; init; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; init; } = string.Empty;
+        public DateTime CreatedAt { get; init; }
     }
 }

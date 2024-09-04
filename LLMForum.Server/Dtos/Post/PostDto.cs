@@ -1,10 +1,18 @@
-﻿namespace LLMForum.Server.Dtos.Post
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LLMForum.Server.Dtos.Post
 {
     public class PostDto
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string UserId { get; set; }
+        [Required]
+        public string Id { get; init; } = string.Empty;
+
+        [Required]
+        public string Title { get; init; } = string.Empty;
+
+        public DateTime CreatedAt { get; init; }
+
+        [Required]
+        public string UserId { get; init; } = string.Empty;
     }
 }

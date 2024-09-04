@@ -1,8 +1,13 @@
-﻿namespace LLMForum.Server.Dtos.Comment
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LLMForum.Server.Dtos.Comment
 {
     public class CommentResponseDto
     {
-        public List<CommentDto> Comments { get; set; }
-        public string Message { get; set; }
+        [Required]
+        public List<CommentDto> Comments { get; init; } = new List<CommentDto>();
+
+        [Required]
+        public string Message { get; init; } = string.Empty;
     }
 }

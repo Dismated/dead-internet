@@ -4,7 +4,7 @@ namespace LLMForum.Server.Models
 {
     public class AppUser : IdentityUser
     {
-        public DateTime CreatedAt { get; set; }
-        public List<Post> Posts { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public virtual List<Post> Posts { get; set; } = new List<Post>();
     }
 }
