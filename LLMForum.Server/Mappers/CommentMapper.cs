@@ -1,11 +1,12 @@
 ﻿using LLMForum.Server.Dtos.Comment;
+using LLMForum.Server.Interfaces;
 using LLMForum.Server.Models;
 
-namespace LLMForum.Server.Mappers
+namespace LLMForum.Server.Mapper
 {
-    public static class CommentMappers
+    public class CommentMapper : ICommentMapper
     {
-        public static CommentDto ToCommentDto(this Comment commentModel)
+        public CommentDto ToCommentDto(Comment commentModel)
         {
             return new CommentDto
             {
@@ -17,8 +18,8 @@ namespace LLMForum.Server.Mappers
             };
         }
 
-        public static Comment ToCommentFromCreateDTO(
-            this CreateCommentRequestDto commentDto,
+        public Comment ToCommentFromCreateDto(
+            CreateCommentRequestDto commentDto,
             string comment,
             string? parentCommentId
         )

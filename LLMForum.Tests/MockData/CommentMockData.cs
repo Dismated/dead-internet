@@ -37,6 +37,17 @@ namespace LLMForum.Tests.MockData
             return mockComment;
         }
 
+        public static CommentDto GetMockCommentDto()
+        {
+            return new CommentDto
+            {
+                Id = GetMockComment().Id,
+                Content = GetMockComment().Content,
+                CreatedAt = GetMockComment().CreatedAt,
+                ParentCommentId = GetMockComment().ParentCommentId,
+            };
+        }
+
         public static CreateCommentRequestDto GetMockCommentRequestDto()
         {
             return new CreateCommentRequestDto
@@ -65,6 +76,78 @@ namespace LLMForum.Tests.MockData
                     ParentCommentId = "1as",
                 },
             ];
+        }
+
+        public static Comment GetMockRandomComment()
+        {
+            return new Comment
+            {
+                Id = Guid.NewGuid().ToString(),
+                Content = "New Comment",
+                CreatedAt = DateTime.Now,
+                ParentCommentId = null,
+                PostId = Guid.NewGuid().ToString(),
+            };
+        }
+
+        //Create list of comment strings
+        public static List<string> GetMockCommentsList()
+        {
+            return
+            [
+                "This is a mock comment.",
+                "This is another mock comment.",
+                "This is yet another mock comment.",
+            ];
+        }
+
+        public static CreateCommentRequestDto GetMockCreateCommentRequestDto()
+        {
+            return new CreateCommentRequestDto
+            {
+                UserPrompt = "This is a mock user prompt.",
+                PostId = "1a",
+            };
+        }
+
+        public static List<Comment> GetMockCommentModelsList(List<string> commentList)
+        {
+            var postId = GetMockCreateCommentRequestDto().PostId;
+            var list = new List<Comment>();
+            foreach (var item in commentList)
+            {
+                list.Add(
+                    new Comment
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Content = item,
+                        CreatedAt = DateTime.Now,
+                        ParentCommentId = list.Count > 0 ? list[^1].Id : null,
+                        PostId = postId,
+                    }
+                );
+            }
+            return list;
+        }
+
+        public static List<CommentDto> GetMockCommentDtosList(List<Comment> commentModelList)
+        {
+            var list = new List<CommentDto>();
+
+            foreach (var item in commentModelList)
+            {
+                list.Add(
+                    new CommentDto
+                    {
+                        Id = item.Id,
+                        Content = item.Content,
+                        CreatedAt = DateTime.Now,
+                        ParentCommentId = item.ParentCommentId,
+                        PostId = item.PostId,
+                    }
+                );
+            }
+            return list;
         }
     }
 }

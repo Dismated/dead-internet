@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LLMForum.Server.Repositories
 {
+    //Ar man reikia sita test'uot?
     public class AccountRepository(UserManager<AppUser> userManager) : IAccountRepository
     {
         private readonly UserManager<AppUser> _userManager = userManager;

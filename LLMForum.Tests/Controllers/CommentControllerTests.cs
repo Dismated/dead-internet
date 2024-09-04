@@ -11,13 +11,15 @@ namespace LLMForum.Tests.Controllers
     {
         private readonly ICommentRepository _commentRepo;
         private readonly ICommentService _commentService;
+        private readonly ICommentMapper _commentMapper;
         private readonly CommentController _controller;
 
         public CommentControllerTests()
         {
             _commentRepo = Substitute.For<ICommentRepository>();
             _commentService = Substitute.For<ICommentService>();
-            _controller = new CommentController(_commentRepo, _commentService);
+            _commentMapper = Substitute.For<ICommentMapper>();
+            _controller = new CommentController(_commentRepo, _commentService, _commentMapper);
         }
 
         [Fact]
@@ -27,6 +29,7 @@ namespace LLMForum.Tests.Controllers
             string testId = "2s";
             var mockComment = CommentMockData.GetMockComment();
             _commentRepo.GetByIdAsync(testId).Returns(Task.FromResult(mockComment));
+            _commentMapper.ToCommentDto(mockComment).Returns(CommentMockData.GetMockCommentDto());
 
             //Act
             var result = await _controller.GetById(testId);

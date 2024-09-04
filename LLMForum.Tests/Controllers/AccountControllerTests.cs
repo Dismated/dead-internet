@@ -52,19 +52,6 @@ namespace LLMForum.Tests.Controllers
         }
 
         [Fact]
-        public async Task Login_ReturnsBadRequest_WithModelState()
-        {
-            //Arrange
-            _controller.ModelState.AddModelError("Username", "Required");
-
-            //Act
-            var result = await _controller.Login(new LoginDto());
-
-            //Assert
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-
-        [Fact]
         public async Task Login_ReturnsUnauthorized_WhenUserIsNull()
         {
             //Arrange

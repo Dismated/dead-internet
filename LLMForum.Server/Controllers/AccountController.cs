@@ -3,7 +3,6 @@ using LLMForum.Server.Interfaces;
 using LLMForum.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace LLMForum.Server.Controllers
 {
@@ -23,9 +22,6 @@ namespace LLMForum.Server.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            //ar man reikia validation'o?
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
             var user = await _accountRepo.GetUserByUsernameAsync(loginDto.Username);
             if (user == null)
                 return Unauthorized("Invalid username!");

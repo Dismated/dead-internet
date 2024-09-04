@@ -2,8 +2,8 @@
 {
     public class CreateCommentRequestDto
     {
-        public string UserPrompt { get; set; }
+        public string UserPrompt { get; set; } = String.Empty;
 
-        public string PostId { get; set; }
+        public string PostId { get; set; } = String.Empty;
     }
 }

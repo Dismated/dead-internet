@@ -10,7 +10,6 @@ namespace LLMForum.Tests.MockData
             return new AppUser
             {
                 UserName = "username",
-
                 PasswordHash = "password",
                 Email = "test@test.com",
             };
