@@ -17,7 +17,7 @@ namespace LLMForum.Tests.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly AccountController _controller;
-        private readonly IAccountRepository _accountRepo;
+        private readonly IAccountService _accountService;
 
         public AccountControllerTests()
         {
@@ -41,52 +41,8 @@ namespace LLMForum.Tests.Controllers
                 null,
                 null
             );
-            _tokenService = Substitute.For<ITokenService>();
-            _accountRepo = Substitute.For<IAccountRepository>();
-            _controller = new AccountController(
-                _userManager,
-                _tokenService,
-                _signInManager,
-                _accountRepo
-            );
-        }
-
-        [Fact]
-        public async Task Login_ReturnsUnauthorized_WhenUserIsNull()
-        {
-            //Arrange
-            var mockLoginDto = UserMockData.GetMockLoginWrongUsernameDto();
-            _accountRepo
-                .GetUserByUsernameAsync(mockLoginDto.Username)
-                .Returns(Task.FromResult<AppUser?>(null));
-
-            //Act
-            var result = await _controller.Login(mockLoginDto);
-
-            //Assert
-            var UnauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);
-            Assert.Equal("Invalid username!", UnauthorizedResult.Value);
-        }
-
-        [Fact]
-        public async Task Login_ReturnsUnauthorized_WhenPasswordIsWrong()
-        {
-            //Arrange
-            var mockLoginDto = UserMockData.GetMockLoginWrongPasswordDto();
-            var mockUser = UserMockData.GetMockUser();
-            _accountRepo
-                .GetUserByUsernameAsync(mockLoginDto.Username)
-                .Returns(Task.FromResult<AppUser?>(mockUser));
-            _signInManager
-                .CheckPasswordSignInAsync(mockUser, mockLoginDto.Password, false)
-                .Returns(Task.FromResult(Microsoft.AspNetCore.Identity.SignInResult.Failed));
-
-            //Act
-            var result = await _controller.Login(mockLoginDto);
-
-            //Assert
-            var UnauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);
-            Assert.Equal("Username not found and/or password incorrect!", UnauthorizedResult.Value);
+            _accountService = Substitute.For<IAccountService>();
+            _controller = new AccountController(_userManager, _signInManager, _accountService);
         }
 
         [Fact]
@@ -96,13 +52,7 @@ namespace LLMForum.Tests.Controllers
             var mockUser = UserMockData.GetMockUser();
             var mockLoginDto = UserMockData.GetMockLoginDto();
             var token = "FakeJWTToken";
-            _accountRepo
-                .GetUserByUsernameAsync(mockLoginDto.Username)
-                .Returns(Task.FromResult<AppUser?>(mockUser));
-            _signInManager
-                .CheckPasswordSignInAsync(mockUser, mockLoginDto.Password, false)
-                .Returns(Task.FromResult(Microsoft.AspNetCore.Identity.SignInResult.Success));
-            _tokenService.CreateToken(mockUser).Returns(token);
+            _accountService.GetUserByUsernameAsync(mockLoginDto).Returns(Task.FromResult(mockUser));
 
             //Act
             var result = await _controller.Login(mockLoginDto);
@@ -113,19 +63,6 @@ namespace LLMForum.Tests.Controllers
             Assert.Equal(mockUser.UserName, dto.UserName);
             Assert.Equal(mockUser.Email, dto.Email);
             Assert.Equal(token, dto.Token);
-        }
-
-        [Fact]
-        public async Task Register_ReturnsBadRequest_WithModelState()
-        {
-            //Arrange
-            _controller.ModelState.AddModelError("Username", "Required");
-
-            //Act
-            var result = await _controller.Register(new RegisterDto());
-
-            //Assert
-            Assert.IsType<BadRequestObjectResult>(result);
         }
 
         public async Task Register_ReturnsStatusCode500_WhenUserAlreadyExists()

@@ -1,5 +1,7 @@
 ﻿using LLMForum.Server.Dtos.Comment;
+using LLMForum.Server.Exceptions;
 using LLMForum.Server.Interfaces;
+using LLMForum.Server.Models;
 
 namespace LLMForum.Server.Services
 {
@@ -12,6 +14,12 @@ namespace LLMForum.Server.Services
         private readonly ICommentRepository _commentRepo = commentRepo;
         private readonly ILLMService _LLMService = LLMService;
         private readonly ICommentMapper _commentMapper = commentMapper;
+
+        public async Task<Comment> GetCommentAsync(string id)
+        {
+            var result = await _commentRepo.GetByIdAsync(id);
+            return result ?? throw new NotFoundException("Comment");
+        }
 
         public async Task<List<CommentDto>> CreateComments(CreateCommentRequestDto commentDto)
         {

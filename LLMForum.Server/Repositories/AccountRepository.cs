@@ -10,9 +10,10 @@ namespace LLMForum.Server.Repositories
     {
         private readonly UserManager<AppUser> _userManager = userManager;
 
-        public async Task<AppUser?> GetUserByUsernameAsync(string? username)
+        public async Task<AppUser> GetUserByUsernameAsync(string? username)
         {
-            return await _userManager.Users.FirstOrDefaultAsync(x => x.Equals(username));
+            return await _userManager.Users.FirstOrDefaultAsync(x => x.Equals(username))
+                ?? throw new UnauthorizedAccessException("Invalid username!");
         }
     }
 }

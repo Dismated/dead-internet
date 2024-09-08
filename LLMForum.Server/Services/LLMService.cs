@@ -1,4 +1,5 @@
 ﻿using LLMForum.Server.Dtos.Comment;
+using LLMForum.Server.Exceptions;
 using LLMForum.Server.Interfaces;
 using Microsoft.SemanticKernel;
 
@@ -16,13 +17,14 @@ namespace LLMForum.Server.Services
 
             foreach (var num in Enumerable.Range(1, _commentCount))
             {
-                var AIResult = await _kernel.InvokePromptAsync<string>(changingPrompt);
-                if (AIResult != null)
-                {
-                    result.Add(AIResult);
-                    changingPrompt += $"/n AI Comment: {AIResult}";
-                }
-                ;
+                var AIResult =
+                    await _kernel.InvokePromptAsync<string>(changingPrompt)
+                    ?? throw new AICommentGenerationFailedException(
+                        "Failed to generate AI comment!"
+                    );
+
+                result.Add(AIResult);
+                changingPrompt += $"/n AI Comment: {AIResult}";
             }
             result.RemoveAt(0);
             return result;

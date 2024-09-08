@@ -12,6 +12,6 @@ namespace LLMForum.Server.Dtos.Account
         public string Email { get; init; } = string.Empty;
 
         [Required]
-        public string Password { get; init; } = string.Empty
+        public string Password { get; init; } = string.Empty;
     }
 }
