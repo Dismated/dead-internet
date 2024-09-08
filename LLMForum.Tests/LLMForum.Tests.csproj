@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\LLMForum.Server\LLMForum.Server.csproj" />
+		<ProjectReference Include="..\LLMForum.Server\LLMForum.Server.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

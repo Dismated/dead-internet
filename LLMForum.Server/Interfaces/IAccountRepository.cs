@@ -4,6 +4,6 @@ namespace LLMForum.Server.Interfaces
 {
     public interface IAccountRepository
     {
-        Task<AppUser> GetUserByUsernameAsync(string? username);
+        Task<AppUser?> GetUserByUsernameAsync(string username);
     }
 }

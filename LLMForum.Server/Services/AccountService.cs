@@ -18,7 +18,11 @@ namespace LLMForum.Server.Services
 
         public async Task<NewAppUserDto> GetUserByUsernameAsync(LoginDto loginDto)
         {
-            var user = await _userRepo.GetUserByUsernameAsync(loginDto.Username);
+            var user =
+                await _userRepo.GetUserByUsernameAsync(loginDto.Username)
+                ?? throw new CustomUnauthorizedAccessException(
+                    "Username not found and/or password incorrect!"
+                );
 
             var signInResult = await _signInManager.CheckPasswordSignInAsync(
                 user,
@@ -27,7 +31,7 @@ namespace LLMForum.Server.Services
             );
 
             if (!signInResult.Succeeded)
-                throw new Exceptions.UnauthorizedAccessException(
+                throw new CustomUnauthorizedAccessException(
                     "Username not found and/or password incorrect!"
                 );
 
@@ -37,7 +41,7 @@ namespace LLMForum.Server.Services
             }
             return new NewAppUserDto
             {
-                UserName = user.UserName,
+                Username = user.UserName,
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user),
             };

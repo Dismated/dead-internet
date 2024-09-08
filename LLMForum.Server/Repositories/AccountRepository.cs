@@ -5,15 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LLMForum.Server.Repositories
 {
-    //Ar man reikia sita test'uot?
     public class AccountRepository(UserManager<AppUser> userManager) : IAccountRepository
     {
         private readonly UserManager<AppUser> _userManager = userManager;
 
-        public async Task<AppUser> GetUserByUsernameAsync(string? username)
+        public async Task<AppUser?> GetUserByUsernameAsync(string username)
         {
-            return await _userManager.Users.FirstOrDefaultAsync(x => x.Equals(username))
-                ?? throw new UnauthorizedAccessException("Invalid username!");
+            return await _userManager.Users.FirstOrDefaultAsync(x => x.Equals(username));
         }
     }
 }

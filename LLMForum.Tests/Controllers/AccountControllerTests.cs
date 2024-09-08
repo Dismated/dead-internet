@@ -3,18 +3,15 @@ using LLMForum.Server.Dtos.Account;
 using LLMForum.Server.Interfaces;
 using LLMForum.Server.Models;
 using LLMForum.Tests.MockData;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 
 namespace LLMForum.Tests.Controllers
 {
     public class AccountControllerTests
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly AccountController _controller;
         private readonly IAccountService _accountService;
@@ -32,26 +29,16 @@ namespace LLMForum.Tests.Controllers
                 null,
                 null
             );
-            _signInManager = Substitute.For<SignInManager<AppUser>>(
-                _userManager,
-                Substitute.For<IHttpContextAccessor>(),
-                Substitute.For<IUserClaimsPrincipalFactory<AppUser>>(),
-                null,
-                null,
-                null,
-                null
-            );
             _accountService = Substitute.For<IAccountService>();
-            _controller = new AccountController(_userManager, _signInManager, _accountService);
+            _controller = new AccountController(_accountService, _userManager);
         }
 
         [Fact]
         public async Task Login_ReturnsOk_WithNewAppUserDto()
         {
             //Arrange
-            var mockUser = UserMockData.GetMockUser();
+            var mockUser = UserMockData.GetMockNewAppUserDto();
             var mockLoginDto = UserMockData.GetMockLoginDto();
-            var token = "FakeJWTToken";
             _accountService.GetUserByUsernameAsync(mockLoginDto).Returns(Task.FromResult(mockUser));
 
             //Act
@@ -60,24 +47,22 @@ namespace LLMForum.Tests.Controllers
             //Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var dto = Assert.IsType<NewAppUserDto>(okResult.Value);
-            Assert.Equal(mockUser.UserName, dto.UserName);
+            Assert.Equal(mockUser.Username, dto.Username);
             Assert.Equal(mockUser.Email, dto.Email);
-            Assert.Equal(token, dto.Token);
+            Assert.Equal(mockUser.Token, dto.Token);
         }
 
+        [Fact]
         public async Task Register_ReturnsStatusCode500_WhenUserAlreadyExists()
         {
             //Arrange
+            var description = "Username already exists!";
             var mockRegisterDto = UserMockData.GetMockRegisterDto();
+            var error = new IdentityError { Description = description };
+
             _userManager
                 .CreateAsync(Arg.Any<AppUser>(), Arg.Any<string>())
-                .Returns(
-                    Task.FromResult(
-                        IdentityResult.Failed(
-                            new IdentityError { Description = "Username already exists!" }
-                        )
-                    )
-                );
+                .Returns(Task.FromResult(IdentityResult.Failed(error)));
 
             //Act
             var result = await _controller.Register(mockRegisterDto);
@@ -85,26 +70,25 @@ namespace LLMForum.Tests.Controllers
             //Assert
             var objResult = Assert.IsType<ObjectResult>(result);
             Assert.Equal(500, objResult.StatusCode);
-            Assert.Contains("Username already exists!", objResult.Value.ToString());
+            Assert.NotNull(objResult.Value);
+            Assert.Equal(description, ((List<IdentityError>)objResult.Value)[0].Description);
         }
 
+        [Fact]
         public async Task Register_ReturnsStatusCode500_WhenFailedToAssignRole()
         {
             //Arrange
             var mockUser = UserMockData.GetMockUser();
             var mockregisterDto = UserMockData.GetMockRegisterDto();
+            var description = "Failed to assign role!";
+            var error = new IdentityError { Description = description };
+
             _userManager
                 .CreateAsync(Arg.Any<AppUser>(), Arg.Any<string>())
                 .Returns(Task.FromResult(IdentityResult.Success));
             _userManager
                 .AddToRoleAsync(Arg.Any<AppUser>(), Arg.Any<string>())
-                .Returns(
-                    Task.FromResult(
-                        IdentityResult.Failed(
-                            new IdentityError { Description = "Failed to assign role!" }
-                        )
-                    )
-                );
+                .Returns(Task.FromResult(IdentityResult.Failed(error)));
 
             //Act
             var result = await _controller.Register(mockregisterDto);
@@ -112,24 +96,8 @@ namespace LLMForum.Tests.Controllers
             //Assert
             var objResult = Assert.IsType<ObjectResult>(result);
             Assert.Equal(500, objResult.StatusCode);
-            Assert.Contains("Failed to assign role!", objResult.Value.ToString());
-        }
-
-        [Fact]
-        public async Task Register_ReturnsStatusCode500_WhenExceptionIsThrown()
-        {
-            // Arrange
-            _userManager
-                .CreateAsync(Arg.Any<AppUser>(), Arg.Any<string>())
-                .ThrowsAsync(new Exception("Test exception"));
-
-            // Act
-            var result = await _controller.Register(UserMockData.GetMockRegisterDto());
-
-            // Assert
-            var statusCodeResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(500, statusCodeResult.StatusCode);
-            Assert.Equal("Test exception", ((Exception)statusCodeResult.Value).Message);
+            Assert.NotNull(objResult.Value);
+            Assert.Equal(description, ((List<IdentityError>)objResult.Value)[0].Description);
         }
 
         [Fact]

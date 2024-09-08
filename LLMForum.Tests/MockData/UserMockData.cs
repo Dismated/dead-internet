@@ -15,6 +15,16 @@ namespace LLMForum.Tests.MockData
             };
         }
 
+        public static NewAppUserDto GetMockNewAppUserDto()
+        {
+            return new NewAppUserDto
+            {
+                Username = "username",
+                Email = "test@test.com",
+                Token = "FakeJWTToken",
+            };
+        }
+
         public static LoginDto GetMockLoginDto()
         {
             return new LoginDto { Username = "username", Password = "password" };
