@@ -5,9 +5,9 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LLMForum.Server", "LLMForum.Server\LLMForum.Server.csproj", "{878056CA-5D34-4D47-AD31-54E375E9985B}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "llmforum.client", "llmforum.client\llmforum.client.esproj", "{7C35AEB3-06A3-4FD8-933D-5D2D7FC13547}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "LLMForum.Client", "llmforum.client\LLMForum.Client.esproj", "{7C35AEB3-06A3-4FD8-933D-5D2D7FC13547}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLMForum.Tests", "LLMForum.Tests\LLMForum.Tests.csproj", "{07A17BE6-C616-49BE-A0E9-597DC98CC4B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LLMForum.Tests", "LLMForum.Tests\LLMForum.Tests.csproj", "{07A17BE6-C616-49BE-A0E9-597DC98CC4B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

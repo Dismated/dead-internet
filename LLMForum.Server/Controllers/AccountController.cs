@@ -14,10 +14,9 @@ namespace LLMForum.Server.Controllers
         private readonly UserManager<AppUser> _userManager = userManager;
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             var user = await _accountService.GetUserByUsernameAsync(loginDto);
-
             return Ok(user);
         }
 
@@ -37,7 +36,7 @@ namespace LLMForum.Server.Controllers
                 var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
                 if (roleResult.Succeeded)
                 {
-                    return Ok("User created");
+                    return Ok(new { message = "User created successfully" });
                 }
                 else
                 {

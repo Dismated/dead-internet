@@ -6,6 +6,6 @@ namespace LLMForum.Server.Interfaces
     public interface ICommentService
     {
         Task<Comment> GetCommentAsync(string Id);
-        Task<List<CommentDto>> CreateComments(CreateCommentRequestDto commentDto);
+        Task<List<CommentDto>> CreateComments(string promptText, string postId);
     }
 }

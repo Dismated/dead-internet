@@ -1,0 +1,12 @@
+<div class="ms-3 mt-3">
+  <app-llm-prompt></app-llm-prompt>
+  <div class="d-flex flex-column gap-3">
+    <div *ngFor="let post of posts; let i = index" class="d-flex justify-content-start align-items-center">
+      <p class="mb-0" style="width:24px;">{{i + 1}}</p>
+      <div style="width:80px; height: 50px; background-color: aqua;" class="mx-2"></div>
+      <div>
+        <p class="mb-0">{{ post.id }}</p>
+      </div>
+    </div>
+  </div>
+</div>

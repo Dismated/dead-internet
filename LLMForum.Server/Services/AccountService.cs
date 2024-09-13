@@ -23,7 +23,6 @@ namespace LLMForum.Server.Services
                 ?? throw new CustomUnauthorizedAccessException(
                     "Username not found and/or password incorrect!"
                 );
-
             var signInResult = await _signInManager.CheckPasswordSignInAsync(
                 user,
                 loginDto.Password,

@@ -5,8 +5,8 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<SpaRoot>..\llmforum.client</SpaRoot>
-		<SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
-		<SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
+		<SpaProxyLaunchCommand>npm run start</SpaProxyLaunchCommand>
+		<SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -29,7 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\llmforum.client\llmforum.client.esproj">
+		<ProjectReference Include="..\llmforum.client\LLMForum.Client.esproj">
 			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
 		</ProjectReference>
 	</ItemGroup>

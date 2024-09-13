@@ -1,5 +1,4 @@
-﻿using LLMForum.Server.Dtos.Comment;
-using LLMForum.Server.Interfaces;
+﻿using LLMForum.Server.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -15,13 +14,5 @@ public class CommentController(ICommentService commentService, ICommentMapper co
     {
         var comment = await _commentService.GetCommentAsync(id);
         return Ok(_commentMapper.ToCommentDto(comment));
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateCommentRequestDto commentDto)
-    {
-        var savedComments = await _commentService.CreateComments(commentDto);
-
-        return Ok(savedComments);
     }
 }

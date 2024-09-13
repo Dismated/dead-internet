@@ -9,7 +9,7 @@ namespace LLMForum.Server.Models
         [Required]
         public string Title { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public List<Comment> Comments { get; set; } = new List<Comment>();
+        public List<Comment> Comments { get; set; } = [];
 
         [Required]
         public string AppUserId { get; set; } = string.Empty;

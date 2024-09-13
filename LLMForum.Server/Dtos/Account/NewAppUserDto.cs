@@ -4,6 +4,7 @@ namespace LLMForum.Server.Dtos.Account
 {
     public class NewAppUserDto
     {
+        [Required]
         public string Username { get; init; } = string.Empty;
 
         [EmailAddress]

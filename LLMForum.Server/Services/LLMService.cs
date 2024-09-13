@@ -1,5 +1,4 @@
-﻿using LLMForum.Server.Dtos.Comment;
-using LLMForum.Server.Exceptions;
+﻿using LLMForum.Server.Exceptions;
 using LLMForum.Server.Interfaces;
 using Microsoft.SemanticKernel;
 
@@ -10,9 +9,9 @@ namespace LLMForum.Server.Services
         private readonly Kernel _kernel = kernel;
         private readonly int _commentCount = 3;
 
-        public async Task<List<string>> GenerateCommentAsync(CreateCommentRequestDto commentModel)
+        public async Task<List<string>> GenerateCommentAsync(string promptText)
         {
-            var changingPrompt = commentModel.UserPrompt;
+            var changingPrompt = promptText;
             List<string> result = [changingPrompt];
 
             foreach (var num in Enumerable.Range(1, _commentCount))

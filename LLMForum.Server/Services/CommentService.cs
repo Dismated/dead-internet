@@ -21,17 +21,17 @@ namespace LLMForum.Server.Services
             return result ?? throw new NotFoundException("Comment");
         }
 
-        public async Task<List<CommentDto>> CreateComments(CreateCommentRequestDto commentDto)
+        public async Task<List<CommentDto>> CreateComments(string promptText, string postId)
         {
-            var aiComments = await _LLMService.GenerateCommentAsync(commentDto);
+            var aiComments = await _LLMService.GenerateCommentAsync(promptText);
 
             var savedComments = new List<CommentDto>();
             foreach (var comment in aiComments)
             {
                 var parentCommentId = savedComments.LastOrDefault()?.Id;
                 var commentModel = _commentMapper.ToCommentFromCreateDto(
-                    commentDto,
                     comment,
+                    postId,
                     parentCommentId
                 );
                 await _commentRepo.CreateAsync(commentModel);

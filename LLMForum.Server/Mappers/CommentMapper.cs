@@ -10,24 +10,21 @@ namespace LLMForum.Server.Mapper
         {
             return new CommentDto
             {
-                Id = commentModel.Id,
                 Content = commentModel.Content,
-                CreatedAt = commentModel.CreatedAt,
-                PostId = commentModel.PostId,
                 ParentCommentId = commentModel.ParentCommentId,
             };
         }
 
         public Comment ToCommentFromCreateDto(
-            CreateCommentRequestDto commentDto,
             string comment,
+            string postId,
             string? parentCommentId
         )
         {
             return new Comment
             {
                 Content = comment,
-                PostId = commentDto.PostId,
+                PostId = postId,
                 ParentCommentId = parentCommentId,
             };
         }

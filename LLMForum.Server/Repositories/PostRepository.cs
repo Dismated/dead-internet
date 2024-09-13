@@ -15,6 +15,11 @@ namespace LLMForum.Server.Repository
             return await _context.Posts.ToListAsync();
         }
 
+        public async Task<List<Post>> GetUserPostsAsync(string userId)
+        {
+            return await _context.Posts.Where(x => x.AppUserId == userId).ToListAsync();
+        }
+
         public async Task<Post?> GetByIdAsync(string id)
         {
             return await _context.Posts.FindAsync(id);

@@ -1,0 +1,22 @@
+<div class="mb-3">
+  <form (ngSubmit)="onSubmit()"
+        class="d-flex justify-content-start w-50">
+    <textarea type="text" [(ngModel)]="promptText"
+              class="form-control"
+              rows="1"
+              (keydown)="handleKeyDown($event)"
+              name="promptText"
+              [placeholder]="placeholder"
+              style="overflow:hidden; resize:none; border-top-right-radius:0; border-bottom-right-radius:0"
+              required></textarea>
+    <button type="submit" [disabled]="!promptText" style="border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem">Post</button>
+  </form>
+  <div *ngIf="response; else error">
+    <p>{{ response }}</p>
+  </div>
+  <ng-template #error>
+    <div class="w-50">
+      <app-error-message [message]="errorMessage"></app-error-message>
+    </div>
+  </ng-template>
+</div>

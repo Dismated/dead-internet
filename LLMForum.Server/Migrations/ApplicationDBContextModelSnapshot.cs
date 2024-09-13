@@ -24,11 +24,8 @@ namespace LLMForum.Server.Migrations
 
             modelBuilder.Entity("LLMForum.Server.Models.AIPersonality", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -119,11 +116,8 @@ namespace LLMForum.Server.Migrations
 
             modelBuilder.Entity("LLMForum.Server.Models.Comment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -132,11 +126,12 @@ namespace LLMForum.Server.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ParentCommentId")
-                        .HasColumnType("int");
+                    b.Property<string>("ParentCommentId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
+                    b.Property<string>("PostId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -149,14 +144,11 @@ namespace LLMForum.Server.Migrations
 
             modelBuilder.Entity("LLMForum.Server.Models.Post", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AIPersonalityId")
-                        .HasColumnType("int");
+                    b.Property<string>("AIPersonalityId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AppUserId")
                         .IsRequired()
@@ -207,13 +199,13 @@ namespace LLMForum.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2d177337-30d7-48d1-8d78-af7c53578fed",
+                            Id = "9b17d09a-8059-4c2f-9f57-aaf8fa8c17e3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8cf750c3-7b54-44ce-a091-78331933f545",
+                            Id = "03c13682-02ff-443b-877b-8a19fc5199be",
                             Name = "User",
                             NormalizedName = "USER"
                         });

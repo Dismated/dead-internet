@@ -1,6 +1,9 @@
 using LLMForum.Server.Data;
 using LLMForum.Server.Interfaces;
+using LLMForum.Server.Mapper;
+using LLMForum.Server.Mappers;
 using LLMForum.Server.Models;
+using LLMForum.Server.Repositories;
 using LLMForum.Server.Repository;
 using LLMForum.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -71,12 +74,21 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ILLMService, LLMService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<ICommentMapper, CommentMapper>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IPostMapper, PostMapper>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseCors(options =>
-    options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true)
+    options
+        .WithOrigins("http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(origin => true)
 );
 
 app.UseDefaultFiles();

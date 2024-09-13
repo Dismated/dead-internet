@@ -11,7 +11,7 @@ namespace LLMForum.Server.Repositories
 
         public async Task<AppUser?> GetUserByUsernameAsync(string username)
         {
-            return await _userManager.Users.FirstOrDefaultAsync(x => x.Equals(username));
+            return await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == username);
         }
     }
 }

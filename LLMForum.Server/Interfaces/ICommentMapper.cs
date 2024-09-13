@@ -6,10 +6,6 @@ namespace LLMForum.Server.Interfaces
     public interface ICommentMapper
     {
         CommentDto ToCommentDto(Comment commentModel);
-        Comment ToCommentFromCreateDto(
-            CreateCommentRequestDto commentDto,
-            string comment,
-            string? parentCommentId
-        );
+        Comment ToCommentFromCreateDto(string postId, string comment, string? parentCommentId);
     }
 }
