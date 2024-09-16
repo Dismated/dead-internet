@@ -8,12 +8,14 @@ namespace LLMForum.Server.Services
     public class CommentService(
         ICommentRepository commentRepo,
         ILLMService LLMService,
-        ICommentMapper commentMapper
+        ICommentMapper commentMapper,
+        IPostService postService
     ) : ICommentService
     {
         private readonly ICommentRepository _commentRepo = commentRepo;
         private readonly ILLMService _LLMService = LLMService;
         private readonly ICommentMapper _commentMapper = commentMapper;
+        private readonly IPostService _postService = postService;
 
         public async Task<Comment> GetCommentAsync(string id)
         {
@@ -21,25 +23,27 @@ namespace LLMForum.Server.Services
             return result ?? throw new NotFoundException("Comment");
         }
 
-        public async Task<List<CommentDto>> CreateComments(string promptText, string postId)
+        public async Task<Comment> CreatePromptAsync(string promptText, string postId)
+        {
+            var promptModel = _commentMapper.ToCommentFromCreateDto(promptText, postId, null);
+            return await _commentRepo.CreatePromptAsync(promptModel);
+        }
+
+        public async Task CreateCommentsAsync(
+            string promptText,
+            string postId,
+            string parentCommentId
+        )
         {
             var aiComments = await _LLMService.GenerateCommentAsync(promptText);
             var savedComments = new List<CommentDto>();
-
+            Console.WriteLine($"lol{postId}");
             foreach (var comment in aiComments)
             {
-                string? parentCommentId = null;
                 if (savedComments.Count != 0)
                 {
-                    Console.WriteLine($"1{savedComments[0].Id}");
-                    Console.WriteLine($"1{savedComments[0].Content}");
-
-                    Console.WriteLine($"2{savedComments[0]}");
-
                     parentCommentId = savedComments.Last().Id;
                 }
-                Console.WriteLine($"3{savedComments}");
-                Console.WriteLine(parentCommentId ?? "null");
                 var commentModel = _commentMapper.ToCommentFromCreateDto(
                     comment,
                     postId,
@@ -48,6 +52,7 @@ namespace LLMForum.Server.Services
 
                 try
                 {
+                    Console.WriteLine($"Saving comment: {postId}");
                     await _commentRepo.CreateAsync(commentModel);
                     savedComments.Add(_commentMapper.ToCommentDto(commentModel));
                 }
@@ -57,7 +62,23 @@ namespace LLMForum.Server.Services
                     throw;
                 }
             }
-            return savedComments;
+        }
+
+        public async Task<List<CommentDto>> GetPostCommentsAsync(string postId)
+        {
+            var commentDtos = new List<CommentDto>();
+            var comments = await _commentRepo.GetPostCommentsAsync(postId);
+
+            foreach (var comment in comments)
+            {
+                commentDtos.Add(_commentMapper.ToCommentDto(comment));
+            }
+            return commentDtos;
+        }
+
+        public async Task<List<CommentDto>> ReturnThreadAsync(string commentId)
+        {
+            return await _commentRepo.ReturnThreadAsync(commentId);
         }
     }
 }

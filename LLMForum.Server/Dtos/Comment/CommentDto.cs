@@ -12,6 +12,7 @@ namespace LLMForum.Server.Dtos.Comment
 
         public DateTime CreatedAt { get; init; }
         public string? ParentCommentId { get; init; }
+        public virtual ICollection<CommentDto> Replies { get; set; } = [];
 
         public string PostId { get; init; } = string.Empty;
     }

@@ -13,8 +13,6 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router, private postService: PostService) {
   }
 
-
-
   ngOnInit(): void {
     this.postService.getPosts().subscribe(
       (response) => {
@@ -25,6 +23,7 @@ export class HomeComponent implements OnInit {
       (error) => console.error(error)
     );
   }
+
   isUserAuthenticated() {
     const token: string | null = localStorage.getItem('token');
 

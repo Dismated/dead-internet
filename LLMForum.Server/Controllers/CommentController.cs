@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/comments")]
 public class CommentController(ICommentService commentService, ICommentMapper commentMapper)
     : ControllerBase
 {
@@ -14,5 +14,13 @@ public class CommentController(ICommentService commentService, ICommentMapper co
     {
         var comment = await _commentService.GetCommentAsync(id);
         return Ok(_commentMapper.ToCommentDto(comment));
+    }
+
+    [HttpGet("post/{postId}")]
+    public async Task<IActionResult> GetByPostId([FromRoute] string postId)
+    {
+        var comments = await _commentService.ReturnThreadAsync(postId);
+
+        return Ok(comments);
     }
 }

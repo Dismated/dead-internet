@@ -13,6 +13,7 @@ namespace LLMForum.Server.Mapper
                 Id = commentModel.Id,
                 Content = commentModel.Content,
                 ParentCommentId = commentModel.ParentCommentId,
+                Replies = commentModel.Replies?.Select(ToCommentDto).ToList() ?? [],
             };
         }
 

@@ -12,6 +12,8 @@ namespace LLMForum.Server.Models
         public string? ParentCommentId { get; set; }
         public virtual Comment? ParentComment { get; set; } = null!;
 
+        public virtual ICollection<Comment> Replies { get; set; } = [];
+
         [Required]
         public string PostId { get; set; } = string.Empty;
 

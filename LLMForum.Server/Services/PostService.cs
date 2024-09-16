@@ -1,6 +1,6 @@
-﻿using LLMForum.Server.Exceptions;
+﻿using LLMForum.Server.Dtos.Post;
+using LLMForum.Server.Exceptions;
 using LLMForum.Server.Interfaces;
-using LLMForum.Server.Models;
 
 namespace LLMForum.Server.Services
 {
@@ -9,10 +9,9 @@ namespace LLMForum.Server.Services
         private readonly IPostRepository _postRepo = postRepo;
         private readonly IPostMapper _postMapper = postMapper;
 
-        public async Task<List<Post>> GetUserPostsAsync(string userId)
+        public async Task<List<PostDto>> GetUserPostsAsync(string userId)
         {
-            var result = await _postRepo.GetUserPostsAsync(userId);
-            return result;
+            return await _postRepo.GetUserPostsAsync(userId);
         }
 
         public async Task<string> GetPostIdAsync(string userId, string prompt)

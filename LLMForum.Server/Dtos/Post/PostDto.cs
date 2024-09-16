@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using LLMForum.Server.Dtos.Comment;
 
 namespace LLMForum.Server.Dtos.Post
 {
@@ -14,5 +15,8 @@ namespace LLMForum.Server.Dtos.Post
 
         [Required]
         public string UserId { get; init; } = string.Empty;
+
+        [Required]
+        public List<CommentDto> Comments { get; init; } = [];
     }
 }

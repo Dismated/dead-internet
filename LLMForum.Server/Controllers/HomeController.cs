@@ -32,9 +32,12 @@ namespace LLMForum.Server.Controllers
         public async Task<IActionResult> CreateLLMResponse([FromBody] AppUserPromptDto promptDto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             var postId = await _postService.GetPostIdAsync(userId, promptDto.Prompt);
-            var comments = await _commentService.CreateComments(promptDto.Prompt, postId);
+            var promptModel = await _commentService.CreatePromptAsync(promptDto.Prompt, postId);
+            await _commentService.CreateCommentsAsync(promptDto.Prompt, postId, promptModel.Id);
+
+            var comments = await _commentService.ReturnThreadAsync(promptModel.Id);
+            Console.WriteLine(comments.ToString());
 
             return Ok(comments);
         }

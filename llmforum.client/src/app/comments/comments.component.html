@@ -1,4 +1,7 @@
-<div>
-  <div>{{promptText}}</div>
-  <div *ngFor="let comment of commentData">{{comment.content}}</div>
+<div class="d-flex flex-column align-items-start">
+  <div class="d-flex justify-content-start align-items-center">
+    <div style="width:80px; height: 50px; background-color: aqua;" class="mx-2"></div>
+    <strong>{{promptText}}</strong>
+  </div>
+  <div><app-comment *ngFor="let comment of commentData" [comment]="comment"></app-comment></div>
 </div>

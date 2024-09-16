@@ -1,4 +1,5 @@
 ﻿using LLMForum.Server.Data;
+using LLMForum.Server.Dtos.Comment;
 using LLMForum.Server.Dtos.Post;
 using LLMForum.Server.Interfaces;
 using LLMForum.Server.Models;
@@ -15,9 +16,24 @@ namespace LLMForum.Server.Repository
             return await _context.Posts.ToListAsync();
         }
 
-        public async Task<List<Post>> GetUserPostsAsync(string userId)
+        public async Task<List<PostDto>> GetUserPostsAsync(string userId)
         {
-            return await _context.Posts.Where(x => x.AppUserId == userId).ToListAsync();
+            return await _context
+                .Posts.Where(x => x.AppUserId == userId)
+                .Select(post => new PostDto
+                {
+                    Id = post.Id,
+                    Title = post.Title,
+                    Comments = post
+                        .Comments.Select(comment => new CommentDto
+                        {
+                            Id = comment.Id,
+                            Content = comment.Content,
+                            CreatedAt = comment.CreatedAt,
+                        })
+                        .ToList(),
+                })
+                .ToListAsync();
         }
 
         public async Task<Post?> GetByIdAsync(string id)

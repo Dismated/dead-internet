@@ -199,13 +199,13 @@ namespace LLMForum.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "33afc780-a453-40cf-a0fb-f5853a29d234",
+                            Id = "9d401727-f0c4-416b-9696-29470576dcce",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "4c3d7680-62a9-4cb1-a649-a12b7cdf1980",
+                            Id = "d7df2236-d333-4871-b16f-64632c4ce9c4",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -320,7 +320,7 @@ namespace LLMForum.Server.Migrations
             modelBuilder.Entity("LLMForum.Server.Models.Comment", b =>
                 {
                     b.HasOne("LLMForum.Server.Models.Comment", "ParentComment")
-                        .WithMany()
+                        .WithMany("Replies")
                         .HasForeignKey("ParentCommentId");
 
                     b.HasOne("LLMForum.Server.Models.Post", "Post")
@@ -408,6 +408,11 @@ namespace LLMForum.Server.Migrations
             modelBuilder.Entity("LLMForum.Server.Models.AppUser", b =>
                 {
                     b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("LLMForum.Server.Models.Comment", b =>
+                {
+                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("LLMForum.Server.Models.Post", b =>

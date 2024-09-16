@@ -1,4 +1,5 @@
-﻿using LLMForum.Server.Models;
+﻿using LLMForum.Server.Dtos.Comment;
+using LLMForum.Server.Models;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LLMForum.Server.Interfaces
@@ -11,5 +12,11 @@ namespace LLMForum.Server.Interfaces
         Task SaveChangesAsync();
 
         Task<IDbContextTransaction> BeginTransactionAsync();
+
+        Task<List<Comment>> GetPostCommentsAsync(string postId);
+
+        Task<Comment> CreatePromptAsync(Comment promptModel);
+
+        Task<List<CommentDto>> ReturnThreadAsync(string postId);
     }
 }

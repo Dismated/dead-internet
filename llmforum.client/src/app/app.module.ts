@@ -12,6 +12,7 @@ import { AuthInterceptor } from './core/auth.interceptor';
 import { LlmPromptComponent } from './home/llm-prompt/llm-prompt.component';
 import { CommentsComponent } from './comments/comments.component';
 import { SharedModule } from './shared/shared.module';
+import { CommentComponent } from './comments/comment/comment.component';
 
 
 
@@ -24,7 +25,8 @@ import { SharedModule } from './shared/shared.module';
     HomeComponent,
     RegisterComponent,
     LlmPromptComponent,
-    CommentsComponent
+    CommentsComponent,
+    CommentComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

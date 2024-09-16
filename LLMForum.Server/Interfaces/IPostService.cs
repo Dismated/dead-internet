@@ -1,10 +1,10 @@
-﻿using LLMForum.Server.Models;
+﻿using LLMForum.Server.Dtos.Post;
 
 namespace LLMForum.Server.Interfaces
 {
     public interface IPostService
     {
-        Task<List<Post>> GetUserPostsAsync(string userId);
+        Task<List<PostDto>> GetUserPostsAsync(string userId);
 
         Task<string> GetPostIdAsync(string userId, string prompt);
 
