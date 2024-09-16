@@ -6,6 +6,8 @@ namespace LLMForum.Server.Interfaces
     {
         Task<List<Post>> GetUserPostsAsync(string userId);
 
-        Task<string> GetPostIdAsync(string userId);
+        Task<string> GetPostIdAsync(string userId, string prompt);
+
+        Task DeletePostAsync(string postId);
     }
 }

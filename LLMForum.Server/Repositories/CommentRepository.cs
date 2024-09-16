@@ -1,6 +1,7 @@
 ﻿using LLMForum.Server.Data;
 using LLMForum.Server.Interfaces;
 using LLMForum.Server.Models;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LLMForum.Server.Repository
 {
@@ -17,6 +18,16 @@ namespace LLMForum.Server.Repository
         {
             await _context.Comments.AddAsync(commentModel);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
         }
     }
 }

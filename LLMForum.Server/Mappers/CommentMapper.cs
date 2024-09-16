@@ -10,6 +10,7 @@ namespace LLMForum.Server.Mapper
         {
             return new CommentDto
             {
+                Id = commentModel.Id,
                 Content = commentModel.Content,
                 ParentCommentId = commentModel.ParentCommentId,
             };

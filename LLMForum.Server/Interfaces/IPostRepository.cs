@@ -10,7 +10,7 @@ namespace LLMForum.Server.Interfaces
         Task<Post?> GetByIdAsync(string id);
         Task<Post> CreateAsync(Post postModel);
         Task<Post?> UpdateAsync(string id, UpdatePostRequestDto postDto);
-        Task<Post?> DeleteAsync(string id);
+        Task DeleteAsync(Post postModel);
         Task<bool> PostExists(string id);
     }
 }

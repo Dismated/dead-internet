@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DataService } from '../core/data.service';
+import { PostService } from '../services/post.service';
 
 @Component({
   selector: 'app-home',
@@ -10,15 +10,16 @@ import { DataService } from '../core/data.service';
 export class HomeComponent implements OnInit {
   posts: any[] | undefined;
 
-  constructor(private router: Router, private dataService: DataService) {
+  constructor(private router: Router, private postService: PostService) {
   }
 
 
 
   ngOnInit(): void {
-    this.dataService.getPosts().subscribe(
+    this.postService.getPosts().subscribe(
       (response) => {
         this.posts = response
+        console.log(this.posts)
 
       },
       (error) => console.error(error)
@@ -33,6 +34,14 @@ export class HomeComponent implements OnInit {
     else {
       return false;
     }
+  }
+
+  deletePost(id: string) {
+    this.postService.deletePost(id).subscribe(
+      (response) => {
+        this.posts = this.posts?.filter((post) => post.id !== id)
+      },
+      (error) => console.error(error))
   }
 
   logout() {

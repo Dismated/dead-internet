@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LlmPromptComponent } from './LlmPromptComponent';
+import { LlmPromptComponent } from './llm-prompt.component';
 
 describe('LlmPromptComponent', () => {
   let component: LlmPromptComponent;

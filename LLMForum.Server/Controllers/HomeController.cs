@@ -7,11 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace LLMForum.Server.Controllers
 {
     [Route("api/home")]
-    public class HomeController(IPostService postService, ICommentService commentService)
-        : ControllerBase
+    public class HomeController(
+        IPostService postService,
+        ICommentService commentService,
+        IPostRepository postRepository
+    ) : ControllerBase
     {
         private readonly IPostService _postService = postService;
         private readonly ICommentService _commentService = commentService;
+        private readonly IPostRepository _postRepo = postRepository;
 
         [Authorize]
         [HttpGet]
@@ -29,10 +33,18 @@ namespace LLMForum.Server.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var postId = await _postService.GetPostIdAsync(userId);
+            var postId = await _postService.GetPostIdAsync(userId, promptDto.Prompt);
             var comments = await _commentService.CreateComments(promptDto.Prompt, postId);
 
             return Ok(comments);
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePost(string id)
+        {
+            await _postService.DeletePostAsync(id);
+            return Ok(new { message = "Post deleted successfully" });
         }
     }
 }

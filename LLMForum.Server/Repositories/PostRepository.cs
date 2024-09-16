@@ -22,7 +22,7 @@ namespace LLMForum.Server.Repository
 
         public async Task<Post?> GetByIdAsync(string id)
         {
-            return await _context.Posts.FindAsync(id);
+            return await _context.Posts.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Post?> UpdateAsync(string id, UpdatePostRequestDto postDto)
@@ -46,16 +46,10 @@ namespace LLMForum.Server.Repository
             return postModel;
         }
 
-        public async Task<Post?> DeleteAsync(string id)
+        public async Task DeleteAsync(Post postModel)
         {
-            var postModel = await _context.Posts.FirstOrDefaultAsync(x => x.Id == id);
-            if (postModel == null)
-            {
-                return null;
-            }
             _context.Posts.Remove(postModel);
             await _context.SaveChangesAsync();
-            return postModel;
         }
 
         public async Task<bool> PostExists(string id)

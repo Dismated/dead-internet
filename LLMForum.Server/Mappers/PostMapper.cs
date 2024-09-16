@@ -16,9 +16,9 @@ namespace LLMForum.Server.Mappers
             };
         }
 
-        public Post ToPostFromCreateDto(string userId)
+        public Post ToPostFromCreateDto(string userId, string prompt)
         {
-            return new Post { AppUserId = userId };
+            return new Post { AppUserId = userId, Title = prompt };
         }
     }
 }

@@ -199,13 +199,13 @@ namespace LLMForum.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9b17d09a-8059-4c2f-9f57-aaf8fa8c17e3",
+                            Id = "33afc780-a453-40cf-a0fb-f5853a29d234",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "03c13682-02ff-443b-877b-8a19fc5199be",
+                            Id = "4c3d7680-62a9-4cb1-a649-a12b7cdf1980",
                             Name = "User",
                             NormalizedName = "USER"
                         });

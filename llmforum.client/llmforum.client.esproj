@@ -7,9 +7,4 @@
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\llmforum.client\browser\</BuildOutputFolder>
   </PropertyGroup>
-  <ItemGroup>
-    <Folder Include="src\app\services\" />
-    <Folder Include="src\app\shared\components\" />
-    <Folder Include="src\app\shared\services\" />
-  </ItemGroup>
 </Project>

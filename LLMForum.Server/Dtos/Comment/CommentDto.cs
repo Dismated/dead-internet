@@ -10,11 +10,9 @@ namespace LLMForum.Server.Dtos.Comment
         [Required]
         public string Content { get; init; } = string.Empty;
 
-        [Required]
         public DateTime CreatedAt { get; init; }
         public string? ParentCommentId { get; init; }
 
-        [Required]
         public string PostId { get; init; } = string.Empty;
     }
 }
