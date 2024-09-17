@@ -9,6 +9,7 @@ namespace LLMForum.Server.Interfaces
         Task<Comment> CreatePromptAsync(string promptText, string postId);
         Task CreateCommentsAsync(string promptText, string postId, string parentCommentId);
         Task<List<CommentDto>> GetPostCommentsAsync(string postId);
-        Task<List<CommentDto>> ReturnThreadAsync(string commentId);
+        CommentDto GetPromptDto(string postId);
+        Task<PromptNRepliesDto> GetPromptNRepliesAsync(CommentDto promptDto);
     }
 }

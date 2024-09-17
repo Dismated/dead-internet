@@ -15,8 +15,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.postService.getPosts().subscribe(
-      (response) => {
-        this.posts = response
+      (res) => {
+        this.posts = res
         console.log(this.posts)
 
       },
@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
 
   deletePost(id: string) {
     this.postService.deletePost(id).subscribe(
-      (response) => {
+      (res) => {
         this.posts = this.posts?.filter((post) => post.id !== id)
       },
       (error) => console.error(error))

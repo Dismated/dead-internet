@@ -7,5 +7,7 @@ namespace LLMForum.Server.Interfaces
     {
         CommentDto ToCommentDto(Comment commentModel);
         Comment ToCommentFromCreateDto(string postId, string comment, string? parentCommentId);
+
+        PromptNRepliesDto ToPromptNRepliesDto(CommentDto prompt, List<CommentDto> replies);
     }
 }

@@ -10,7 +10,7 @@ export class CommentsService {
 
   constructor(private http: HttpClient) { }
 
-  getComments(id: string | null): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${id}`)
+  getComments(id: string | null): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`)
   }
 }

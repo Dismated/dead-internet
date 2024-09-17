@@ -8,14 +8,12 @@ namespace LLMForum.Server.Services
     public class CommentService(
         ICommentRepository commentRepo,
         ILLMService LLMService,
-        ICommentMapper commentMapper,
-        IPostService postService
+        ICommentMapper commentMapper
     ) : ICommentService
     {
         private readonly ICommentRepository _commentRepo = commentRepo;
         private readonly ILLMService _LLMService = LLMService;
         private readonly ICommentMapper _commentMapper = commentMapper;
-        private readonly IPostService _postService = postService;
 
         public async Task<Comment> GetCommentAsync(string id)
         {
@@ -76,9 +74,16 @@ namespace LLMForum.Server.Services
             return commentDtos;
         }
 
-        public async Task<List<CommentDto>> ReturnThreadAsync(string commentId)
+        public CommentDto GetPromptDto(string postId)
         {
-            return await _commentRepo.ReturnThreadAsync(commentId);
+            var prompt = _commentRepo.GetOldestByPostId(postId);
+            return _commentMapper.ToCommentDto(prompt);
+        }
+
+        public async Task<PromptNRepliesDto> GetPromptNRepliesAsync(CommentDto promptDto)
+        {
+            var replies = await _commentRepo.GetRepliesAsync(promptDto.Id);
+            return _commentMapper.ToPromptNRepliesDto(promptDto, replies);
         }
     }
 }

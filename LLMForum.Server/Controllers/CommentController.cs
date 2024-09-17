@@ -3,11 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/comments")]
-public class CommentController(ICommentService commentService, ICommentMapper commentMapper)
-    : ControllerBase
+public class CommentController(
+    ICommentService commentService,
+    ICommentMapper commentMapper,
+    IPostService postService
+) : ControllerBase
 {
     private readonly ICommentService _commentService = commentService;
     private readonly ICommentMapper _commentMapper = commentMapper;
+    private readonly IPostService _postService = postService;
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] string id)
@@ -17,10 +21,10 @@ public class CommentController(ICommentService commentService, ICommentMapper co
     }
 
     [HttpGet("post/{postId}")]
-    public async Task<IActionResult> GetByPostId([FromRoute] string postId)
+    public async Task<IActionResult> GetPromptNRepliesByPostId([FromRoute] string postId)
     {
-        var comments = await _commentService.ReturnThreadAsync(postId);
+        var promptNReplies = await _postService.GetPostPageAsync(postId);
 
-        return Ok(comments);
+        return Ok(promptNReplies);
     }
 }

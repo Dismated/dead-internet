@@ -5,7 +5,7 @@ using LLMForum.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace LLMForum.Server.Repository
+namespace LLMForum.Server.Repositories
 {
     public class CommentRepository(ApplicationDBContext context, ICommentMapper commentMapper)
         : ICommentRepository
@@ -46,11 +46,12 @@ namespace LLMForum.Server.Repository
             return promptModel;
         }
 
-        public async Task<List<CommentDto>> ReturnThreadAsync(string commentId)
+        public async Task<List<CommentDto>> GetRepliesAsync(string commentId)
         {
             var comment = await _context
                 .Comments.Include(c => c.Replies)
                 .FirstOrDefaultAsync(c => c.Id == commentId);
+
             if (comment == null)
                 return [];
 
@@ -58,10 +59,18 @@ namespace LLMForum.Server.Repository
 
             foreach (var reply in commentDto.Replies)
             {
-                reply.Replies = await ReturnThreadAsync(reply.Id);
+                reply.Replies = await GetRepliesAsync(reply.Id);
             }
 
             return [.. commentDto.Replies];
+        }
+
+        public Comment? GetOldestByPostId(string postId)
+        {
+            return _context
+                .Comments.Where(c => c.PostId == postId)
+                .OrderBy(c => c.CreatedAt)
+                .FirstOrDefault();
         }
     }
 }

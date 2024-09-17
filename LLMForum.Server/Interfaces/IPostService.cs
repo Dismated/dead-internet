@@ -1,4 +1,5 @@
-﻿using LLMForum.Server.Dtos.Post;
+﻿using LLMForum.Server.Dtos.Comment;
+using LLMForum.Server.Dtos.Post;
 
 namespace LLMForum.Server.Interfaces
 {
@@ -9,5 +10,8 @@ namespace LLMForum.Server.Interfaces
         Task<string> GetPostIdAsync(string userId, string prompt);
 
         Task DeletePostAsync(string postId);
+
+        Task<PromptNRepliesDto> GetInitialPostPageAsync(string userId, string prompt);
+        Task<PromptNRepliesDto> GetPostPageAsync(string postId);
     }
 }

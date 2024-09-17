@@ -7,4 +7,10 @@ import { Component, Input } from '@angular/core';
 })
 export class CommentComponent {
   @Input() comment: any;
+  @Input() depth: number = 0;
+
+  deleteCommentChain(commentId: string) {
+    this.commentService.deleteCommentChain(commentId).subscribe((res) => {
+    })
+  }
 }

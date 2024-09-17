@@ -16,24 +16,16 @@ export class CommentsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private commentsService: CommentsService
-  ) {
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras.state) {
-      this.commentData = navigation.extras.state['commentData'];
-      this.promptText = navigation.extras.state['promptText'];
-    }
-  }
+  ) { }
 
   ngOnInit() {
     this.postId = this.route.snapshot.paramMap.get('id');
     if (this.commentData == null) {
       this.commentsService.getComments(this.postId).subscribe(
         (response) => {
-          console.log(response)
-          this.promptText = response[0].content
-          this.commentData = response.splice(1)
+          this.promptText = response.prompt.content
+          this.commentData = response.replies
         },
         (error) => console.error(error))
     }

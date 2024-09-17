@@ -20,6 +20,7 @@ namespace LLMForum.Server.Repository
         {
             return await _context
                 .Posts.Where(x => x.AppUserId == userId)
+                .OrderByDescending(post => post.CreatedAt)
                 .Select(post => new PostDto
                 {
                     Id = post.Id,

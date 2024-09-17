@@ -13,6 +13,7 @@ namespace LLMForum.Server.Mapper
                 Id = commentModel.Id,
                 Content = commentModel.Content,
                 ParentCommentId = commentModel.ParentCommentId,
+                PostId = commentModel.PostId,
                 Replies = commentModel.Replies?.Select(ToCommentDto).ToList() ?? [],
             };
         }
@@ -29,6 +30,11 @@ namespace LLMForum.Server.Mapper
                 PostId = postId,
                 ParentCommentId = parentCommentId,
             };
+        }
+
+        public PromptNRepliesDto ToPromptNRepliesDto(CommentDto prompt, List<CommentDto> replies)
+        {
+            return new PromptNRepliesDto { Prompt = prompt, Replies = replies };
         }
     }
 }

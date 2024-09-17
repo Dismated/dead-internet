@@ -7,15 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace LLMForum.Server.Controllers
 {
     [Route("api/home")]
-    public class HomeController(
-        IPostService postService,
-        ICommentService commentService,
-        IPostRepository postRepository
-    ) : ControllerBase
+    public class HomeController(IPostService postService) : ControllerBase
     {
         private readonly IPostService _postService = postService;
-        private readonly ICommentService _commentService = commentService;
-        private readonly IPostRepository _postRepo = postRepository;
 
         [Authorize]
         [HttpGet]
@@ -32,14 +26,9 @@ namespace LLMForum.Server.Controllers
         public async Task<IActionResult> CreateLLMResponse([FromBody] AppUserPromptDto promptDto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var postId = await _postService.GetPostIdAsync(userId, promptDto.Prompt);
-            var promptModel = await _commentService.CreatePromptAsync(promptDto.Prompt, postId);
-            await _commentService.CreateCommentsAsync(promptDto.Prompt, postId, promptModel.Id);
+            var postPage = await _postService.GetInitialPostPageAsync(userId, promptDto.Prompt);
 
-            var comments = await _commentService.ReturnThreadAsync(promptModel.Id);
-            Console.WriteLine(comments.ToString());
-
-            return Ok(comments);
+            return Ok(postPage);
         }
 
         [Authorize]

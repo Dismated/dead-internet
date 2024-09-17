@@ -3,5 +3,7 @@
     <div style="width:80px; height: 50px; background-color: aqua;" class="mx-2"></div>
     <strong>{{promptText}}</strong>
   </div>
-  <div><app-comment *ngFor="let comment of commentData" [comment]="comment"></app-comment></div>
+  <div class="w-100">
+    <app-comment *ngFor="let comment of commentData;let i = index" [comment]="comment" [depth]="0"></app-comment>
+  </div>
 </div>

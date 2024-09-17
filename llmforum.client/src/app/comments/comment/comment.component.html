@@ -1,8 +1,24 @@
-<div class="comment">
-  <div class="comment-content">
-    <p>{{ comment.content }}</p>
+<div class="comment" [ngClass]="{'even': depth % 2 === 0, 'odd': depth % 2 !== 0}">
+  <div class="comment-content d-flex justify-content-start">
+    <small style="color: var(--bs-primary-text-emphasis)" class="text-button pb-2">
+      [-]
+    </small>
+    <div class="d-flex justify-content-start flex-column align-items-start ms-2 mb-2">
+      <p class="mb-0">{{ comment.content }}</p>
+      <div>
+        <small>
+          <span class="text-button" style="color: var(--bs-secondary-color)">edit</span>
+        </small>
+        <small>
+          <span class="text-button" style="color: var(--bs-secondary-color)">reply</span>
+        </small>
+        <small>
+          <span class="text-button" (click)="deleteCommentChain(comment.id)" style="color: var(--bs-secondary-color)">delete</span>
+        </small>
+      </div>
+    </div>
   </div>
   <div class="replies" *ngIf="comment.replies && comment.replies.length > 0">
-    <app-comment *ngFor="let reply of comment.replies" [comment]="reply"></app-comment>
+    <app-comment *ngFor="let reply of comment.replies;" [comment]="reply" [depth]="depth + 1"></app-comment>
   </div>
 </div>

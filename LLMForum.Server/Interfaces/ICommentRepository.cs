@@ -17,6 +17,8 @@ namespace LLMForum.Server.Interfaces
 
         Task<Comment> CreatePromptAsync(Comment promptModel);
 
-        Task<List<CommentDto>> ReturnThreadAsync(string postId);
+        Task<List<CommentDto>> GetRepliesAsync(string postId);
+
+        Comment? GetOldestByPostId(string postId);
     }
 }

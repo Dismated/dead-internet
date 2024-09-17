@@ -29,11 +29,8 @@ export class LlmPromptComponent implements OnInit {
         .subscribe(
           (res: any) => {
             this.response = res.response;
-            console.log(res, 'gagn');
-            const navigationExtras: NavigationExtras = {
-              state: { commentData: res, promptText: this.promptText }
-            };
-            this.router.navigate(['/comments', res[0].postId], navigationExtras);
+            console.log(res)
+            this.router.navigate(['/comments', res.prompt.postId]);
 
           },
           (error) => {
