@@ -231,8 +231,8 @@ namespace LLMForum.Server.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "9d401727-f0c4-416b-9696-29470576dcce", null, "Admin", "ADMIN" },
-                    { "d7df2236-d333-4871-b16f-64632c4ce9c4", null, "User", "USER" }
+                    { "7fda689f-1b97-4f34-a80f-23c3fede00b7", null, "Admin", "ADMIN" },
+                    { "ff10e1f0-693c-4f3e-aa1e-4a3ce2138d8b", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(

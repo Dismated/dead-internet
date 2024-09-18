@@ -46,7 +46,7 @@ namespace LLMForum.Server.Repositories
             return promptModel;
         }
 
-        public async Task<List<CommentDto>> GetRepliesAsync(string commentId)
+        public async Task<List<CommentDto>> GetRepliesDtoAsync(string commentId)
         {
             var comment = await _context
                 .Comments.Include(c => c.Replies)
@@ -59,7 +59,7 @@ namespace LLMForum.Server.Repositories
 
             foreach (var reply in commentDto.Replies)
             {
-                reply.Replies = await GetRepliesAsync(reply.Id);
+                reply.Replies = await GetRepliesDtoAsync(reply.Id);
             }
 
             return [.. commentDto.Replies];
@@ -71,6 +71,56 @@ namespace LLMForum.Server.Repositories
                 .Comments.Where(c => c.PostId == postId)
                 .OrderBy(c => c.CreatedAt)
                 .FirstOrDefault();
+        }
+
+        public async Task<List<Comment>> GetRepliesAsync(string commentId)
+        {
+            var comment = await _context
+                .Comments.Include(c => c.Replies)
+                .FirstOrDefaultAsync(c => c.Id == commentId);
+
+            if (comment == null)
+                return [];
+
+            foreach (var reply in comment.Replies)
+            {
+                reply.Replies = await GetRepliesAsync(reply.Id);
+            }
+
+            return [.. comment.Replies];
+        }
+
+        public async Task DeleteCommentChainAsync(string commentId)
+        {
+            {
+                var commentsToDelete = new List<string> { commentId };
+
+                await CollectCommentsToDelete(commentId, commentsToDelete);
+                await DeleteCommentsRecursively(commentsToDelete);
+            }
+        }
+
+        public async Task CollectCommentsToDelete(string commentId, List<string> commentsToDelete)
+        {
+            var replies = await GetRepliesAsync(commentId);
+            foreach (var reply in replies)
+            {
+                await CollectCommentsToDelete(reply.Id, commentsToDelete);
+            }
+            commentsToDelete.Add(commentId);
+        }
+
+        public async Task DeleteCommentsRecursively(List<string> commentIds)
+        {
+            foreach (var id in commentIds)
+            {
+                var comment = await _context.Comments.FindAsync(id);
+                if (comment != null)
+                {
+                    _context.Comments.Remove(comment);
+                }
+            }
+            await _context.SaveChangesAsync();
         }
     }
 }

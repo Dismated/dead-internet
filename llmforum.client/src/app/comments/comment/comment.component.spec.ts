@@ -10,8 +10,8 @@ describe('CommentComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CommentComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(CommentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LLMForum.Server.Models
 {
@@ -19,5 +21,25 @@ namespace LLMForum.Server.Models
 
         [Required]
         public virtual Post Post { get; set; } = null!;
+    }
+
+    public class CommentConfiguration : IEntityTypeConfiguration<Comment>
+    {
+        public void Configure(EntityTypeBuilder<Comment> builder)
+        {
+            builder.HasKey(c => c.Id);
+
+            builder
+                .HasOne(c => c.ParentComment)
+                .WithMany(c => c.Replies)
+                .HasForeignKey(c => c.ParentCommentId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder
+                .HasOne(c => c.Post)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(c => c.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

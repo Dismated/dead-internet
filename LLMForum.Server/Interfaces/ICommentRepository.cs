@@ -7,6 +7,7 @@ namespace LLMForum.Server.Interfaces
     public interface ICommentRepository
     {
         Task<Comment?> GetByIdAsync(string id);
+
         Task CreateAsync(Comment commentDto);
 
         Task SaveChangesAsync();
@@ -17,8 +18,16 @@ namespace LLMForum.Server.Interfaces
 
         Task<Comment> CreatePromptAsync(Comment promptModel);
 
-        Task<List<CommentDto>> GetRepliesAsync(string postId);
+        Task<List<CommentDto>> GetRepliesDtoAsync(string postId);
 
         Comment? GetOldestByPostId(string postId);
+
+        Task<List<Comment>> GetRepliesAsync(string postId);
+
+        Task DeleteCommentChainAsync(string commentId);
+
+        Task CollectCommentsToDelete(string commentId, List<string> commentsToDelete);
+
+        Task DeleteCommentsRecursively(List<string> comments);
     }
 }

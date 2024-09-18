@@ -27,4 +27,11 @@ public class CommentController(
 
         return Ok(promptNReplies);
     }
+
+    [HttpDelete("{commentId}")]
+    public async Task<IActionResult> DeleteCommentChain([FromRoute] string commentId)
+    {
+        await _commentService.DeleteCommentChainAsync(commentId);
+        return Ok(new { message = "Post deleted successfully" });
+    }
 }

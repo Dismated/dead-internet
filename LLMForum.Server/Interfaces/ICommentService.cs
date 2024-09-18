@@ -11,5 +11,6 @@ namespace LLMForum.Server.Interfaces
         Task<List<CommentDto>> GetPostCommentsAsync(string postId);
         CommentDto GetPromptDto(string postId);
         Task<PromptNRepliesDto> GetPromptNRepliesAsync(CommentDto promptDto);
+        Task DeleteCommentChainAsync(string commentId);
     }
 }

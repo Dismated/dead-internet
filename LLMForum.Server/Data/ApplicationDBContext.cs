@@ -23,6 +23,7 @@ namespace LLMForum.Server.Data
                 new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
                 new IdentityRole { Name = "User", NormalizedName = "USER" },
             };
+            builder.ApplyConfiguration(new CommentConfiguration());
 
             builder.Entity<IdentityRole>().HasData(roles);
         }

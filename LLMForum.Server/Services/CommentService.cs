@@ -82,8 +82,13 @@ namespace LLMForum.Server.Services
 
         public async Task<PromptNRepliesDto> GetPromptNRepliesAsync(CommentDto promptDto)
         {
-            var replies = await _commentRepo.GetRepliesAsync(promptDto.Id);
+            var replies = await _commentRepo.GetRepliesDtoAsync(promptDto.Id);
             return _commentMapper.ToPromptNRepliesDto(promptDto, replies);
+        }
+
+        public async Task DeleteCommentChainAsync(string commentId)
+        {
+            await _commentRepo.DeleteCommentChainAsync(commentId);
         }
     }
 }
