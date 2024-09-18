@@ -24,11 +24,35 @@ export class CommentsComponent implements OnInit {
     if (this.commentData == null) {
       this.commentsService.getComments(this.postId).subscribe(
         (response) => {
+          console.log(response, 'lol')
+
           this.promptText = response.prompt.content
           this.commentData = response.replies
         },
         (error) => console.error(error))
     }
+  }
+
+  deleteCommentChain(commentId: string) {
+    this.commentsService.deleteCommentChain(commentId).subscribe(() => {
+      this.removeCommentRecursively(this.commentData, commentId);
+    },
+      (error) => {
+        console.error('Error deleting comment:', error);
+      });
+  }
+
+  private removeCommentRecursively(comments: any, commentId: string): boolean {
+    for (let i = 0; i < comments.length; i++) {
+      if (comments[i].id === commentId) {
+        comments.splice(i, 1);
+        return true;
+      }
+      if (comments[i].replies && this.removeCommentRecursively(comments[i].replies, commentId)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

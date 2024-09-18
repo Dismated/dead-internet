@@ -7,7 +7,7 @@ namespace LLMForum.Server.Services
     public class LLMService(Kernel kernel) : ILLMService
     {
         private readonly Kernel _kernel = kernel;
-        private readonly int _commentCount = 4;
+        private readonly int _commentCount = 3;
 
         public async Task<List<string>> GenerateCommentAsync(string promptText)
         {

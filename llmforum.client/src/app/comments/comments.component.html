@@ -4,6 +4,6 @@
     <strong>{{promptText}}</strong>
   </div>
   <div class="w-100">
-    <app-comment *ngFor="let comment of commentData;let i = index" [comment]="comment" [depth]="0"></app-comment>
+    <app-comment *ngFor="let comment of commentData;let i = index" [comment]="comment" [depth]="0" (deleteComment)="deleteCommentChain($event)"></app-comment>
   </div>
 </div>

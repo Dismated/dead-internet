@@ -13,12 +13,12 @@
           <span class="text-button" style="color: var(--bs-secondary-color)">reply</span>
         </small>
         <small>
-          <span class="text-button" (click)="deleteCommentChain(comment.id)" style="color: var(--bs-secondary-color)">delete</span>
+          <span class="text-button" (click)="onDeleteClick()" style="color: var(--bs-secondary-color)">delete</span>
         </small>
       </div>
     </div>
   </div>
   <div class="replies" *ngIf="comment.replies && comment.replies.length > 0">
-    <app-comment *ngFor="let reply of comment.replies;" [comment]="reply" [depth]="depth + 1"></app-comment>
+    <app-comment *ngFor="let reply of comment.replies;" [comment]="reply" [depth]="depth + 1" (deleteComment)="onDeleteComment($event)"></app-comment>
   </div>
 </div>

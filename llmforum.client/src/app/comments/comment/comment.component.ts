@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { CommentsService } from '../../services/comments.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-comment',
@@ -9,12 +8,13 @@ import { CommentsService } from '../../services/comments.service';
 export class CommentComponent {
   @Input() comment: any;
   @Input() depth: number = 0;
+  @Output() deleteComment = new EventEmitter<string>();
 
-  constructor(private commentService: CommentsService) { }
+  onDeleteClick() {
+    this.deleteComment.emit(this.comment.id);
+  }
 
-  deleteCommentChain(commentId: string) {
-    this.commentService.deleteCommentChain(commentId).subscribe((res) => {
-
-    })
+  onDeleteComment(commentId: string) {
+    this.deleteComment.emit(commentId);
   }
 }
