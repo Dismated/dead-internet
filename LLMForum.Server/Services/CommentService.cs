@@ -1,5 +1,5 @@
 ﻿using LLMForum.Server.Dtos.Comment;
-using LLMForum.Server.Exceptions;
+using LLMForum.Server.Exceptions.Base;
 using LLMForum.Server.Interfaces;
 using LLMForum.Server.Models;
 
@@ -35,7 +35,7 @@ namespace LLMForum.Server.Services
         {
             var aiComments = await _LLMService.GenerateCommentAsync(promptText);
             var savedComments = new List<CommentDto>();
-            Console.WriteLine($"lol{postId}");
+
             foreach (var comment in aiComments)
             {
                 if (savedComments.Count != 0)
@@ -47,18 +47,8 @@ namespace LLMForum.Server.Services
                     postId,
                     parentCommentId
                 );
-
-                try
-                {
-                    Console.WriteLine($"Saving comment: {postId}");
-                    await _commentRepo.CreateAsync(commentModel);
-                    savedComments.Add(_commentMapper.ToCommentDto(commentModel));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error saving comment: {ex.Message}");
-                    throw;
-                }
+                await _commentRepo.CreateAsync(commentModel);
+                savedComments.Add(_commentMapper.ToCommentDto(commentModel));
             }
         }
 
@@ -76,7 +66,8 @@ namespace LLMForum.Server.Services
 
         public CommentDto GetPromptDto(string postId)
         {
-            var prompt = _commentRepo.GetOldestByPostId(postId);
+            var prompt =
+                _commentRepo.GetOldestByPostId(postId) ?? throw new NotFoundException("Prompt");
             return _commentMapper.ToCommentDto(prompt);
         }
 

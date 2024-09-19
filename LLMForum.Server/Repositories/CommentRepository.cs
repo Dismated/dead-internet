@@ -3,7 +3,6 @@ using LLMForum.Server.Dtos.Comment;
 using LLMForum.Server.Interfaces;
 using LLMForum.Server.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LLMForum.Server.Repositories
 {
@@ -22,16 +21,6 @@ namespace LLMForum.Server.Repositories
         {
             await _context.Comments.AddAsync(commentModel);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IDbContextTransaction> BeginTransactionAsync()
-        {
-            return await _context.Database.BeginTransactionAsync();
         }
 
         public async Task<List<Comment>> GetPostCommentsAsync(string postId)
@@ -125,9 +114,9 @@ namespace LLMForum.Server.Repositories
 
         public async Task UpdateCommentAsync(string commentId, string content)
         {
-            var existingComment = await _context.Comments.FirstOrDefaultAsync(x =>
-                x.Id == commentId
-            );
+            var existingComment =
+                await _context.Comments.FirstOrDefaultAsync(x => x.Id == commentId)
+                ?? throw new DirectoryNotFoundException("Comment");
 
             existingComment.Content = content;
 

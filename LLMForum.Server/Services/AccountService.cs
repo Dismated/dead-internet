@@ -1,5 +1,5 @@
 ﻿using LLMForum.Server.Dtos.Account;
-using LLMForum.Server.Exceptions;
+using LLMForum.Server.Exceptions.Base;
 using LLMForum.Server.Interfaces;
 using LLMForum.Server.Models;
 using Microsoft.AspNetCore.Identity;
@@ -51,6 +51,7 @@ namespace LLMForum.Server.Services
             }
 
             var token = CreateToken(user);
+
             return new NewAppUserDto
             {
                 Username = user.UserName,
@@ -108,15 +109,6 @@ namespace LLMForum.Server.Services
                 throw new Exception(
                     "Failed to create guest user: "
                         + string.Join(", ", createResult.Errors.Select(e => e.Description))
-                );
-            }
-
-            var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
-            if (!roleResult.Succeeded)
-            {
-                throw new Exception(
-                    "Failed to assign role to guest user: "
-                        + string.Join(", ", roleResult.Errors.Select(e => e.Description))
                 );
             }
         }

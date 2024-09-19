@@ -1,4 +1,4 @@
-﻿using LLMForum.Server.Exceptions;
+﻿using LLMForum.Server.Exceptions.External;
 using LLMForum.Server.Interfaces;
 using Microsoft.SemanticKernel;
 

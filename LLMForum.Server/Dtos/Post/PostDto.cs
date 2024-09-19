@@ -14,9 +14,6 @@ namespace LLMForum.Server.Dtos.Post
         public DateTime CreatedAt { get; init; }
 
         [Required]
-        public string UserId { get; init; } = string.Empty;
-
-        [Required]
         public List<CommentDto> Comments { get; init; } = [];
     }
 }

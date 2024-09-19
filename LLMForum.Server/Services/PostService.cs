@@ -1,6 +1,6 @@
 ﻿using LLMForum.Server.Dtos.Comment;
 using LLMForum.Server.Dtos.Post;
-using LLMForum.Server.Exceptions;
+using LLMForum.Server.Exceptions.Base;
 using LLMForum.Server.Interfaces;
 
 namespace LLMForum.Server.Services

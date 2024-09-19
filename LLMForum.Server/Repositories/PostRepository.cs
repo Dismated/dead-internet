@@ -11,11 +11,6 @@ namespace LLMForum.Server.Repository
     {
         private readonly ApplicationDBContext _context = context;
 
-        public async Task<List<Post>> GetAllAsync()
-        {
-            return await _context.Posts.ToListAsync();
-        }
-
         public async Task<List<PostDto>> GetUserPostsAsync(string userId)
         {
             return await _context
@@ -40,20 +35,6 @@ namespace LLMForum.Server.Repository
         public async Task<Post?> GetByIdAsync(string id)
         {
             return await _context.Posts.FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        public async Task<Post?> UpdateAsync(string id, UpdatePostRequestDto postDto)
-        {
-            var existingPost = await _context.Posts.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (existingPost == null)
-            {
-                return null;
-            }
-            existingPost.Title = postDto.Title;
-
-            await _context.SaveChangesAsync();
-            return existingPost;
         }
 
         public async Task<Post> CreateAsync(Post postModel)

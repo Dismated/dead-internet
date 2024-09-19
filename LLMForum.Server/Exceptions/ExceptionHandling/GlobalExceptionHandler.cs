@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LLMForum.Server.Exceptions.Base;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace LLMForum.Server.Exceptions
+namespace LLMForum.Server.Exceptions.ExceptionHandling
 {
     public class GlobalExceptionHandler : IExceptionFilter
     {
@@ -9,8 +10,11 @@ namespace LLMForum.Server.Exceptions
         {
             var statusCode = context.Exception switch
             {
+                BadRequestException => StatusCodes.Status400BadRequest,
                 NotFoundException => StatusCodes.Status404NotFound,
-                // Add other exception types here
+                CustomUnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+
+                ExternalServiceException => StatusCodes.Status502BadGateway,
                 _ => StatusCodes.Status500InternalServerError,
             };
 

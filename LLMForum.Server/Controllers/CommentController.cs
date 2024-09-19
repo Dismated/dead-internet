@@ -1,5 +1,6 @@
 ﻿using LLMForum.Server.Dtos.Comment;
 using LLMForum.Server.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -14,6 +15,7 @@ public class CommentController(
     private readonly ICommentMapper _commentMapper = commentMapper;
     private readonly IPostService _postService = postService;
 
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] string id)
     {
@@ -21,14 +23,15 @@ public class CommentController(
         return Ok(_commentMapper.ToCommentDto(comment));
     }
 
+    [Authorize]
     [HttpGet("post/{postId}")]
     public async Task<IActionResult> GetPromptNRepliesByPostId([FromRoute] string postId)
     {
         var promptNReplies = await _postService.GetPostPageAsync(postId);
-
         return Ok(promptNReplies);
     }
 
+    [Authorize]
     [HttpDelete("{commentId}")]
     public async Task<IActionResult> DeleteCommentChain([FromRoute] string commentId)
     {
@@ -36,6 +39,7 @@ public class CommentController(
         return Ok(new { message = "Post deleted successfully" });
     }
 
+    [Authorize]
     [HttpPut("{commentId}")]
     public async Task<IActionResult> UpdateComment(
         [FromRoute] string commentId,
@@ -50,6 +54,7 @@ public class CommentController(
         return Ok(replies);
     }
 
+    [Authorize]
     [HttpPost("reply")]
     public async Task<IActionResult> CreateReply([FromBody] ReplyDto replyDto)
     {

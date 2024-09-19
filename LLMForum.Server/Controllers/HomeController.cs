@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using LLMForum.Server.Dtos.AppUser;
+using LLMForum.Server.Exceptions;
 using LLMForum.Server.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +16,12 @@ namespace LLMForum.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserPosts()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId =
+                User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                ?? throw new NotFoundException("User Id");
 
             var posts = await _postService.GetUserPostsAsync(userId);
+
             return Ok(posts);
         }
 
@@ -25,7 +29,10 @@ namespace LLMForum.Server.Controllers
         [HttpPost("prompt")]
         public async Task<IActionResult> CreateLLMResponse([FromBody] AppUserPromptDto promptDto)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId =
+                User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                ?? throw new NotFoundException("User Id");
+
             var postPage = await _postService.GetInitialPostPageAsync(userId, promptDto.Prompt);
 
             return Ok(postPage);

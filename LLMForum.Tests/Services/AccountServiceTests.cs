@@ -1,5 +1,5 @@
 ﻿using LLMForum.Server.Dtos.Account;
-using LLMForum.Server.Exceptions;
+using LLMForum.Server.Exceptions.Base;
 using LLMForum.Server.Interfaces;
 using LLMForum.Server.Models;
 using LLMForum.Server.Services;
