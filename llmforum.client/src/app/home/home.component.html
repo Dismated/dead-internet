@@ -4,7 +4,7 @@
     <div *ngFor="let post of posts; let i = index" class="d-flex">
       <div [routerLink]="['/comments', post.id]" style="cursor: pointer;" class="d-flex justify-content-start align-items-center">
         <p class="mb-0" style="width:24px;">{{i + 1}}</p>
-        <div style="width:80px; height: 50px; background-color: aqua;" class="mx-2"></div>
+        <div style="width: 80px; height: 50px; background-color: aqua; border-radius: var(--bs-border-radius);" class="mx-2"></div>
       </div>
       <div class="d-flex flex-column align-items-start">
         <div [routerLink]="['/comments', post.id]" class="pointer">

@@ -19,14 +19,14 @@ namespace LLMForum.Server.Mapper
         }
 
         public Comment ToCommentFromCreateDto(
-            string comment,
+            string content,
             string postId,
             string? parentCommentId
         )
         {
             return new Comment
             {
-                Content = comment,
+                Content = content,
                 PostId = postId,
                 ParentCommentId = parentCommentId,
             };

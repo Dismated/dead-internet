@@ -40,4 +40,15 @@ export class LoginComponent {
     }
   }
 
+  onGuestLoginClick() {
+    this.authService.guestLogin().subscribe((res) => {
+      localStorage.setItem('token', res.token);
+      this.router.navigate(['/home']);
+    })
+  }
+
+  onRegisterClick() {
+    this.router.navigate(['/register']);
+  }
+
 }

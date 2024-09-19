@@ -4,7 +4,7 @@
   padding-top: 2px;
   padding-bottom: 10px;
   padding-right: 10px;
-  border: 1px solid var( --bs-border-color-translucent);
+  border: 1px solid var(--bs-border-color-translucent);
 }
 
   .comment :not(:first-child) {
@@ -24,6 +24,23 @@
   cursor: pointer;
 }
 
+.text-button-blue {
+  color: var(--bs-primary-text-emphasis);
+}
+
+  .text-button-blue:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
 .pointer:hover {
   cursor: pointer;
+}
+
+.auth-container {
+  width: 350px;
+  background-color: var(--bs-secondary-bg);
+  border: 1px solid var(--bs-border-color-translucent);
+  border-radius: var(--bs-border-radius);
+  padding: 18px 10px 10px 10px;
 }

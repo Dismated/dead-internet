@@ -27,6 +27,12 @@ namespace LLMForum.Server.Services
             return post.Id;
         }
 
+        public async Task<string> GetPostIdFromCommentAsync(string commentId)
+        {
+            var comment = await _commentService.GetCommentAsync(commentId);
+            return comment.PostId;
+        }
+
         public async Task DeletePostAsync(string postId)
         {
             var postModel =

@@ -80,15 +80,37 @@ namespace LLMForum.Server.Services
             return _commentMapper.ToCommentDto(prompt);
         }
 
+        public async Task<List<CommentDto>> GetRepliesDtoAsync(string commentId)
+        {
+            return await _commentRepo.GetRepliesDtoAsync(commentId);
+        }
+
         public async Task<PromptNRepliesDto> GetPromptNRepliesAsync(CommentDto promptDto)
         {
-            var replies = await _commentRepo.GetRepliesDtoAsync(promptDto.Id);
+            var replies = await GetRepliesDtoAsync(promptDto.Id);
             return _commentMapper.ToPromptNRepliesDto(promptDto, replies);
         }
 
         public async Task DeleteCommentChainAsync(string commentId)
         {
             await _commentRepo.DeleteCommentChainAsync(commentId);
+        }
+
+        public async Task UpdateCommentAsync(string commentId, string content)
+        {
+            await _commentRepo.UpdateCommentAsync(commentId, content);
+        }
+
+        public async Task<string> CreateReplyAsync(ReplyDto replyDto, string postId)
+        {
+            var commentModel = _commentMapper.ToCommentFromCreateDto(
+                replyDto.Content,
+                postId,
+                replyDto.ParentCommentId
+            );
+            await _commentRepo.CreateAsync(commentModel);
+
+            return commentModel.Id;
         }
     }
 }

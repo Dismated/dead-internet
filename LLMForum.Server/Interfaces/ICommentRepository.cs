@@ -29,5 +29,7 @@ namespace LLMForum.Server.Interfaces
         Task CollectCommentsToDelete(string commentId, List<string> commentsToDelete);
 
         Task DeleteCommentsRecursively(List<string> comments);
+
+        Task UpdateCommentAsync(string commentId, string content);
     }
 }

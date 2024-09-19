@@ -9,6 +9,8 @@ namespace LLMForum.Server.Interfaces
 
         Task<string> GetPostIdAsync(string userId, string prompt);
 
+        Task<string> GetPostIdFromCommentAsync(string commentId);
+
         Task DeletePostAsync(string postId);
 
         Task<PromptNRepliesDto> GetInitialPostPageAsync(string userId, string prompt);

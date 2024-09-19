@@ -11,42 +11,30 @@ namespace LLMForum.Server.Controllers
         : ControllerBase
     {
         private readonly IAccountService _accountService = accountService;
-        private readonly UserManager<AppUser> _userManager = userManager;
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            var user = await _accountService.GetUserByUsernameAsync(loginDto);
+            var user = await _accountService.GetVerifiedUserAsync(loginDto);
             return Ok(user);
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
-            var appUser = new AppUser
-            {
-                UserName = registerDto.Username,
-                Email = registerDto.Email,
-            };
+            await _accountService.CreateAccountAsync(registerDto);
+            return Ok(new { message = "Account created successfully" });
+        }
 
-            var createResult = await _userManager.CreateAsync(appUser, registerDto.Password);
+        [HttpPost("guest/login")]
+        public async Task<IActionResult> LoginAsGuest()
+        {
+            var guest = _accountService.CreateGuestAccountAsync();
+            await _accountService.CreateAccountAsync(guest);
 
-            if (createResult.Succeeded)
-            {
-                var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
-                if (roleResult.Succeeded)
-                {
-                    return Ok(new { message = "User created successfully" });
-                }
-                else
-                {
-                    return StatusCode(500, roleResult.Errors);
-                }
-            }
-            else
-            {
-                return StatusCode(500, createResult.Errors);
-            }
+            var user = await _accountService.GetUserByUsernameAsync(guest.Username);
+            var token = _accountService.CreateToken(user);
+            return Ok(new { token });
         }
     }
 }

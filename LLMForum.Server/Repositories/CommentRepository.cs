@@ -122,5 +122,16 @@ namespace LLMForum.Server.Repositories
             }
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateCommentAsync(string commentId, string content)
+        {
+            var existingComment = await _context.Comments.FirstOrDefaultAsync(x =>
+                x.Id == commentId
+            );
+
+            existingComment.Content = content;
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

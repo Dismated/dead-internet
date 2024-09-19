@@ -1,24 +1,48 @@
-<div class="comment" [ngClass]="{'even': depth % 2 === 0, 'odd': depth % 2 !== 0}">
-  <div class="comment-content d-flex justify-content-start">
-    <small style="color: var(--bs-primary-text-emphasis)" class="text-button pb-2">
-      [-]
-    </small>
-    <div class="d-flex justify-content-start flex-column align-items-start ms-2 mb-2">
-      <p class="mb-0">{{ comment.content }}</p>
-      <div>
-        <small>
-          <span class="text-button" style="color: var(--bs-secondary-color)">edit</span>
-        </small>
-        <small>
-          <span class="text-button" style="color: var(--bs-secondary-color)">reply</span>
-        </small>
-        <small>
-          <span class="text-button" (click)="onDeleteClick()" style="color: var(--bs-secondary-color)">delete</span>
-        </small>
+<div class="comment" [ngClass]="{'even': depth % 2 === 0, 'odd': depth % 2 !== 0}" style="border-radius: var(--bs-border-radius); margin-top: -5px">
+  <div *ngIf="!isMinimized; else minimized">
+    <div class="comment-content d-flex justify-content-start">
+      <small>
+        <span (click)="onMinimizeClick()" class="text-button-blue pb-2">
+          [-]
+        </span>
+      </small>
+      <div class="d-flex justify-content-start flex-column align-items-start ms-2 mb-2">
+        <ng-container *ngIf="isEditing; else showComment">
+          <input type="text" [(ngModel)]="editContent" class="form-control mb-2" />
+          <button (click)="onSaveEdit()" class="btn btn-sm btn-primary">Save</button>
+          <button (click)="onCancelEdit()" class="btn btn-sm btn-secondary">Cancel</button>
+        </ng-container>
+
+        <ng-template #showComment>
+          <p class="mb-0">{{ comment.content }}</p>
+        </ng-template>
+        <div>
+          <small>
+            <span class="text-button" (click)="onEditClick()" style="color: var(--bs-secondary-color)">edit</span>
+          </small>
+          <small>
+            <span class="text-button" (click)="onReplyClick()" style="color: var(--bs-secondary-color)">reply</span>
+          </small>
+          <small>
+            <span class="text-button" (click)="onDeleteClick()" style="color: var(--bs-secondary-color)">delete</span>
+          </small>
+        </div>
       </div>
     </div>
+    <ng-container *ngIf="isReplying">
+      <input type="text" [(ngModel)]="replyContent" class="form-control" />
+      <button (click)="onSaveReply()" class="btn btn-sm btn-primary">Save</button>
+      <button (click)="onCancelReply()" class="btn btn-sm btn-secondary">Cancel</button>
+    </ng-container>
+    <div class="replies" *ngIf="comment.replies && comment.replies.length > 0">
+      <app-comment *ngFor="let reply of comment.replies;" [comment]="reply" [depth]="depth + 1" (deleteComment)="onDeleteComment($event)"></app-comment>
+    </div>
   </div>
-  <div class="replies" *ngIf="comment.replies && comment.replies.length > 0">
-    <app-comment *ngFor="let reply of comment.replies;" [comment]="reply" [depth]="depth + 1" (deleteComment)="onDeleteComment($event)"></app-comment>
-  </div>
+  <ng-template #minimized>
+    <small class="d-flex justify-content-start align-items-start">
+      <span (click)="onMinimizeClick()" class="text-button-blue pb-2">
+        [+]
+      </span>
+    </small>
+  </ng-template>
 </div>

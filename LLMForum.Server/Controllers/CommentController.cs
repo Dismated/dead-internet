@@ -1,4 +1,5 @@
-﻿using LLMForum.Server.Interfaces;
+﻿using LLMForum.Server.Dtos.Comment;
+using LLMForum.Server.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -33,5 +34,29 @@ public class CommentController(
     {
         await _commentService.DeleteCommentChainAsync(commentId);
         return Ok(new { message = "Post deleted successfully" });
+    }
+
+    [HttpPut("{commentId}")]
+    public async Task<IActionResult> UpdateComment(
+        [FromRoute] string commentId,
+        [FromBody] UpdateCommentContentDto comment
+    )
+    {
+        await _commentService.UpdateCommentAsync(commentId, comment.Content);
+        var postId = await _postService.GetPostIdFromCommentAsync(commentId);
+        await _commentService.CreateCommentsAsync(comment.Content, postId, commentId);
+        var replies = await _commentService.GetRepliesDtoAsync(commentId);
+
+        return Ok(replies);
+    }
+
+    [HttpPost("reply")]
+    public async Task<IActionResult> CreateReply([FromBody] ReplyDto replyDto)
+    {
+        var postId = await _postService.GetPostIdFromCommentAsync(replyDto.ParentCommentId);
+        var replyId = await _commentService.CreateReplyAsync(replyDto, postId);
+        await _commentService.CreateCommentsAsync(replyDto.Content, postId, replyId);
+
+        return Ok(new { message = "Reply created successfully" });
     }
 }
