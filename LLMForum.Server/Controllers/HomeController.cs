@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using LLMForum.Server.Dtos.AppUser;
-using LLMForum.Server.Exceptions;
+using LLMForum.Server.Exceptions.Base;
 using LLMForum.Server.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

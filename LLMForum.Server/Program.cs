@@ -68,7 +68,6 @@ builder
         }
     );
 
-builder.Services.AddScoped<IAppUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();

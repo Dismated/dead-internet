@@ -44,3 +44,17 @@
   border-radius: var(--bs-border-radius);
   padding: 18px 10px 10px 10px;
 }
+
+.background-svg {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 25%;
+  z-index: -1;
+  filter: opacity(3%)
+}
+
+.thumbnail-svg {
+  filter: opacity(30%);
+  width: 75%;
+}
