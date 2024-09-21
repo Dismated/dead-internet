@@ -8,11 +8,12 @@ import { LoginComponent } from './auth/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { RegisterComponent } from './auth/register/register.component';
-import { AuthInterceptor } from './core/auth.interceptor';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { LlmPromptComponent } from './home/llm-prompt/llm-prompt.component';
 import { CommentsComponent } from './comments/comments.component';
-import { SharedModule } from './shared/shared.module';
 import { CommentComponent } from './comments/comment/comment.component';
+import { ErrorMessageComponent } from "./core/error-handling/error-display.component";
+import { ErrorPopupComponent } from './core/error-handling/error-popup/error-popup.component';
 
 
 
@@ -26,13 +27,14 @@ import { CommentComponent } from './comments/comment/comment.component';
     RegisterComponent,
     LlmPromptComponent,
     CommentsComponent,
-    CommentComponent
+    CommentComponent,
+    ErrorMessageComponent,
+    ErrorPopupComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    SharedModule,
     ReactiveFormsModule,
 
     JwtModule.forRoot({

@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { ErrorService } from '../../core/services/error.service';
+import { Subscription, catchError, throwError } from 'rxjs';
 
 
 @Component({
@@ -9,37 +11,67 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit, OnDestroy {
   registerForm: FormGroup;
-  errorMessage: string | null = null;
+  errorMessage: string | undefined;
+  private errorSubscription: Subscription | undefined;
+  usernameFocused: boolean = false;
+  emailFocused: boolean = false;
+  passwordFocused: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router, private errorService: ErrorService) {
     this.registerForm = this.formBuilder.group({
-      username: ['', Validators.required],
+      username: ['', [Validators.required, Validators.minLength(4)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)]],
     });
+  }
+
+  ngOnInit() {
+    this.errorSubscription = this.errorService.getError().subscribe(
+      error => {
+        if (error) {
+          // Handle the error, e.g., display it in the template
+        }
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.errorSubscription) {
+      this.errorSubscription.unsubscribe();
+    }
   }
 
   onSubmit() {
     if (this.registerForm.valid) {
       const { username, email, password } = this.registerForm.value;
       this.authService.register(username, email, password)
-        .subscribe(
-          () => {
+        .pipe(
+          catchError(error => {
+            if (error.status === 0) {
+              this.errorService.setErrorMessage('Unable to connect to the server. Please try again later.', 'error');
+            } else if (error.status === 400) {
+              this.errorService.setErrorMessage('Invalid input. Please check your details and try again.', 'warning');
+            } else {
+              this.errorService.setErrorMessage('An unexpected error occurred. Please try again.', 'error');
+            }
+            return throwError(() => error);
+          })
+        )
+        .subscribe({
+          next: () => {
             this.router.navigate(['/login']);
           },
-          (error) => {
-            if (error.status === 0) {
-              this.errorMessage = 'Unable to connect to the server. Please try again later.';
-            } else {
-
-              this.errorMessage = 'An error occurred during registration. Please check your input and try again.';
-            }
+          error: (err) => {
+            console.error('Registration failed', err);
           }
-        );
+        });
+    } else {
+      this.errorService.setErrorMessage('Please fill in all required fields correctly.', 'warning');
     }
   }
+
 
   onGuestLoginClick() {
     this.authService.guestLogin().subscribe((res) => {
@@ -50,5 +82,15 @@ export class RegisterComponent {
 
   onLoginClick() {
     this.router.navigate(['/login']);
+  }
+
+  get username() {
+    return this.registerForm.get('username');
+  }
+  get email() {
+    return this.registerForm.get('email');
+  }
+  get password() {
+    return this.registerForm.get('password');
   }
 }

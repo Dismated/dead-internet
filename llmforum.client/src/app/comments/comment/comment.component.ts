@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommentsService } from '../../services/comments.service';
+import { CommentsService } from '../../features/services/comments.service';
+import { catchError, throwError } from 'rxjs';
+import { ErrorService } from '../../core/services/error.service';
 
 @Component({
   selector: 'app-comment',
@@ -17,7 +19,7 @@ export class CommentComponent {
   replyContent: string = '';
   isMinimized: boolean = false;
 
-  constructor(private commentsService: CommentsService) { }
+  constructor(private commentsService: CommentsService, private errorService: ErrorService) { }
 
   onEditClick() {
     this.isEditing = true;
@@ -26,11 +28,14 @@ export class CommentComponent {
 
   onSaveEdit() {
     if (this.editContent.trim()) {
-      this.commentsService.editComment(this.comment.id, this.editContent).subscribe(() => {
+      this.commentsService.editComment(this.comment.id, this.editContent).pipe(
+        catchError(error => {
+          this.errorService.setErrorMessage('Failed to update comment');
+          return throwError(() => error);
+        })
+      ).subscribe(() => {
         this.comment.content = this.editContent;
         this.isEditing = false;
-      }, error => {
-        console.error('Error updating comment:', error);
       });
     }
   }
@@ -45,10 +50,15 @@ export class CommentComponent {
 
   onSaveReply() {
     if (this.replyContent.trim()) {
-      this.commentsService.createComment({ content: this.replyContent, parentCommentId: this.comment.id }).subscribe(() => {
-        console.log('replyyea')
+      this.commentsService.createComment({ content: this.replyContent, parentCommentId: this.comment.id }).pipe(
+        catchError(error => {
+          this.errorService.setErrorMessage('Failed to create reply');
+          return throwError(() => error);
+        })
+      ).subscribe(() => {
         this.isReplying = false;
-      }, error => { console.error('Error creating comment:', error); });
+        this.replyContent = ''; // Clear the reply content
+      });
     }
   }
 

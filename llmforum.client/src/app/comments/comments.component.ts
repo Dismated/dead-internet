@@ -1,7 +1,9 @@
 
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CommentsService } from "../services/comments.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CommentsService } from "../features/services/comments.service";
+import { ErrorService } from '../core/services/error.service';
+import { Subscription, catchError } from 'rxjs';
 
 
 @Component({
@@ -9,27 +11,44 @@ import { CommentsService } from "../services/comments.service";
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.css'
 })
-export class CommentsComponent implements OnInit {
+export class CommentsComponent implements OnInit, OnDestroy {
   postId: string | null = null
   commentData: any = null
   promptText = ""
+  private errorSubscription: Subscription | undefined;
+
+  private subscriptions = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
-    private commentsService: CommentsService
+    private commentsService: CommentsService,
+    private errorService: ErrorService
   ) { }
 
   ngOnInit() {
     this.postId = this.route.snapshot.paramMap.get('id');
-    if (this.commentData == null) {
-      this.commentsService.getComments(this.postId).subscribe(
-        (response) => {
-          console.log(response, 'lol')
+    if (this.postId == null) {
+      this.subscriptions.add(
+        this.commentsService.getComments(this.postId!).pipe(
+          catchError(error => {
+            this.errorService.setErrorMessage('Failed to load comments');
+            return throwError(() => error);
+          })
+        ).subscribe(
+          res => {
+            this.promptText = res.prompt.content;
+            this.commentData = res.replies;
+          }
+        ));
+    }
+    else {
+      this.errorService.setErrorMessage('No post ID provided');
+    }
+  }
 
-          this.promptText = response.prompt.content
-          this.commentData = response.replies
-        },
-        (error) => console.error(error))
+  ngOnDestroy() {
+    if (this.errorSubscription) {
+      this.errorSubscription.unsubscribe();
     }
   }
 
@@ -56,3 +75,7 @@ export class CommentsComponent implements OnInit {
   }
 }
 
+
+function throwError(arg0: () => any): any {
+  throw new Error('Function not implemented.');
+}

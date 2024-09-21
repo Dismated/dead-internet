@@ -1,50 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { PostService } from '../services/post.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { PostService } from '../features/services/post.service';
+import { Subscription, catchError, throwError, finalize } from 'rxjs';
+import { ErrorService } from '../core/services/error.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit {
-  posts: any[] | undefined;
+export class HomeComponent implements OnInit, OnDestroy {
+  posts: any[] = []
+  private subscriptions = new Subscription();
 
-  constructor(private router: Router, private postService: PostService) {
+
+  constructor(private postService: PostService, private errorService: ErrorService) {
   }
 
   ngOnInit(): void {
-    this.postService.getPosts().subscribe(
-      (res) => {
-        this.posts = res
-        console.log(this.posts)
-
-      },
-      (error) => console.error(error)
+    this.subscriptions.add(
+      this.postService.getPosts().pipe(
+        catchError(error => {
+          this.errorService.setErrorMessage('Failed to load posts');
+          return throwError(() => error);
+        })
+      ).subscribe(
+        res => this.posts = res
+      )
     );
   }
 
-  isUserAuthenticated() {
-    const token: string | null = localStorage.getItem('token');
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 
-    if (token) {
-      return true;
-    }
-    else {
-      return false;
-    }
+  isUserAuthenticated() {
+    return !!localStorage.getItem('token');
   }
 
   deletePost(id: string) {
-    this.postService.deletePost(id).subscribe(
-      (res) => {
-        this.posts = this.posts?.filter((post) => post.id !== id)
-      },
-      (error) => console.error(error))
-  }
-
-  logout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+    this.subscriptions.add(
+      this.postService.deletePost(id).pipe(
+        catchError(error => {
+          this.errorService.setErrorMessage('Failed to delete post');
+          return throwError(() => error);
+        })
+      ).subscribe(
+        () => {
+          this.posts = this.posts.filter((post) => post.id !== id);
+        }
+      )
+    );
   }
 }

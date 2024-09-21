@@ -1,7 +1,9 @@
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
+import { ErrorService } from '../../core/services/error.service';
 
 
 @Component({
@@ -17,7 +19,8 @@ export class LlmPromptComponent implements OnInit {
   placeholder: string = `Create a post ${this.spaces} (Shift + Enter for new line)`
 
 
-  constructor(private http: HttpClient, private router: Router) { }
+
+  constructor(private http: HttpClient, private router: Router, private errorService: ErrorService) { }
 
   ngOnInit(): void {
     this.updatePlaceholder();
@@ -26,16 +29,23 @@ export class LlmPromptComponent implements OnInit {
   onSubmit() {
     if (this.promptText) {
       this.http.post('https://localhost:7201/api/home/prompt', { prompt: this.promptText })
+        .pipe(
+          catchError((error: HttpErrorResponse) => {
+            let errorMessage = 'An unknown error occurred';
+            if (error.error instanceof ErrorEvent) {
+              errorMessage = `Error: ${error.error.message}`;
+            } else {
+              errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+            }
+            this.errorService.setErrorMessage(errorMessage);
+            return throwError(() => error);
+          })
+        )
         .subscribe(
           (res: any) => {
             this.response = res.response;
-            console.log(res)
+            console.log(res);
             this.router.navigate(['/comments', res.prompt.postId]);
-
-          },
-          (error) => {
-            console.error('Error:', error);
-            this.errorMessage = 'An error occurred while processing your request.';
           }
         );
     }
@@ -58,6 +68,7 @@ export class LlmPromptComponent implements OnInit {
       this.onSubmit();
     }
   }
+
 
   adjustTextareaHeight(textarea: HTMLTextAreaElement): void {
     textarea.style.height = 'auto';
