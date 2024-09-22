@@ -14,6 +14,7 @@ import { CommentsComponent } from './comments/comments.component';
 import { CommentComponent } from './comments/comment/comment.component';
 import { ErrorMessageComponent } from "./core/error-handling/error-display.component";
 import { ErrorPopupComponent } from './core/error-handling/error-popup/error-popup.component';
+import { LoadingComponent } from './core/loading/loading.component';
 
 
 
@@ -29,7 +30,8 @@ import { ErrorPopupComponent } from './core/error-handling/error-popup/error-pop
     CommentsComponent,
     CommentComponent,
     ErrorMessageComponent,
-    ErrorPopupComponent
+    ErrorPopupComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

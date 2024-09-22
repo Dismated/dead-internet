@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PostService } from '../features/services/post.service';
-import { Subscription, catchError, throwError, finalize } from 'rxjs';
+import { Subscription, catchError, throwError } from 'rxjs';
 import { ErrorService } from '../core/services/error.service';
 
 @Component({
@@ -24,7 +24,11 @@ export class HomeComponent implements OnInit, OnDestroy {
           return throwError(() => error);
         })
       ).subscribe(
-        res => this.posts = res
+        res => {
+          this.posts = res
+          console.log(this.posts[0].id)
+        }
+
       )
     );
   }
