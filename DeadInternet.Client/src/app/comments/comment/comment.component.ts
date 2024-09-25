@@ -18,6 +18,7 @@ export class CommentComponent {
   isReplying: boolean = false;
   replyContent: string = '';
   isMinimized: boolean = false;
+  loading: boolean = false;
 
   constructor(private commentsService: CommentsService, private errorService: ErrorService) { }
 
@@ -27,12 +28,13 @@ export class CommentComponent {
   }
 
   onSaveEdit() {
+    this.loading = true;
     if (this.editContent.trim()) {
       this.commentsService.editComment(this.comment.id, this.editContent).pipe(
         catchError(error => {
           this.errorService.setErrorMessage('Failed to update comment');
           return throwError(() => error);
-        })
+        }), finalize(() => { this.loading = false; })
       ).subscribe(() => {
         this.comment.content = this.editContent;
         this.isEditing = false;
@@ -51,11 +53,12 @@ export class CommentComponent {
 
   onSaveReply() {
     if (this.replyContent.trim()) {
+      this.loading = true;
       this.commentsService.createComment({ content: this.replyContent, parentCommentId: this.comment.id }).pipe(
         catchError(error => {
           this.errorService.setErrorMessage('Failed to create reply');
           return throwError(() => error);
-        })
+        }), finalize(() => { this.loading = false; })
       ).subscribe(() => {
         this.isReplying = false;
         this.replyContent = '';

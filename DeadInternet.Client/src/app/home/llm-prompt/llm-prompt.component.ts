@@ -17,7 +17,7 @@ export class LlmPromptComponent implements OnInit {
   errorMessage = '';
   spaces: string = " "
   placeholder: string = `Create a post ${this.spaces} (Shift + Enter for new line)`
-
+  loading: boolean = false;
 
 
   constructor(private http: HttpClient, private router: Router, private errorService: ErrorService) { }
@@ -28,6 +28,7 @@ export class LlmPromptComponent implements OnInit {
 
   onSubmit() {
     if (this.promptText) {
+      this.loading = true
       this.http.post('https://localhost:7201/api/home/prompt', { prompt: this.promptText })
         .pipe(
           catchError((error: HttpErrorResponse) => {
@@ -40,11 +41,11 @@ export class LlmPromptComponent implements OnInit {
             this.errorService.setErrorMessage(errorMessage);
             return throwError(() => error);
           })
-        )
+          ,
+          finalize(() => this.loading = false))
         .subscribe(
           (res: any) => {
             this.response = res.response;
-            console.log(res);
             this.router.navigate(['/comments', res.prompt.postId]);
           }
         );
