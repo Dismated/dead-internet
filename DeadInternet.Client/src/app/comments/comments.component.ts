@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommentsService } from "../features/services/comments.service";
 import { ErrorService } from '../core/services/error.service';
-import { Subscription, catchError, finalize } from 'rxjs';
+import { Subscription, catchError } from 'rxjs';
 
 
 @Component({
@@ -16,8 +16,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
   commentData: any = null
   promptText = ""
   private errorSubscription: Subscription | undefined;
+
   private subscriptions = new Subscription();
-  loading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,15 +26,14 @@ export class CommentsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.loading = true;
     this.postId = this.route.snapshot.paramMap.get('id');
-    if (this.postId !== null) {
+    if (this.postId == null) {
       this.subscriptions.add(
         this.commentsService.getComments(this.postId!).pipe(
           catchError(error => {
             this.errorService.setErrorMessage('Failed to load comments');
             return throwError(() => error);
-          }), finalize(() => this.loading = false)
+          })
         ).subscribe(
           res => {
             this.promptText = res.prompt.content;
@@ -78,3 +77,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
 }
 
 
+function throwError(arg0: () => any): any {
+  throw new Error('Function not implemented.');
+}
