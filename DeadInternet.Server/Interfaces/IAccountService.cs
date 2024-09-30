@@ -8,8 +8,9 @@ namespace DeadInternet.Server.Interfaces
         Task<AppUser> GetUserByUsernameAsync(string username);
         string CreateToken(AppUser user);
         Task<NewAppUserDto> GetVerifiedUserAsync(LoginDto loginDto);
+        string GeneratePassword();
         string GeneratePassword(int length);
-        RegisterDto CreateGuestAccountAsync();
+        RegisterDto CreateGuestAccount();
         Task CreateAccountAsync(RegisterDto registerDto);
     }
 }

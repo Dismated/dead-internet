@@ -1,4 +1,7 @@
-﻿namespace DeadInternet.Tests.MockData
+﻿using DeadInternet.Server.Dtos.Comment;
+using DeadInternet.Server.Models;
+
+namespace DeadInternet.Tests.MockData
 {
     public static class CommentMockData
     {
@@ -38,19 +41,21 @@
         {
             return new CommentDto
             {
-                Id = GetMockComment().Id,
-                Content = GetMockComment().Content,
-                CreatedAt = GetMockComment().CreatedAt,
-                ParentCommentId = GetMockComment().ParentCommentId,
+                Id = Guid.NewGuid().ToString(),
+                Content = "This is a mock comment.",
+                CreatedAt = DateTime.Now,
+                ParentCommentId = Guid.NewGuid().ToString(),
             };
         }
 
-        public static CreateCommentRequestDto GetMockCommentRequestDto()
+        public static CommentDto GetMockCommentDto(Comment commentModel)
         {
-            return new CreateCommentRequestDto
+            return new CommentDto
             {
-                UserPrompt = "This is a mock user prompt.",
-                PostId = "1a",
+                Id = commentModel.Id,
+                Content = commentModel.Content,
+                CreatedAt = commentModel.CreatedAt,
+                ParentCommentId = commentModel.ParentCommentId,
             };
         }
 
@@ -87,7 +92,6 @@
             };
         }
 
-        //Create list of comment strings
         public static List<string> GetMockCommentsList()
         {
             return
@@ -98,18 +102,16 @@
             ];
         }
 
-        public static CreateCommentRequestDto GetMockCreateCommentRequestDto()
+        public static List<Comment> GetMockCommentModelsList()
         {
-            return new CreateCommentRequestDto
-            {
-                UserPrompt = "This is a mock user prompt.",
-                PostId = "1a",
-            };
+            return GetMockCommentModelsList(GetMockCommentsList(), Guid.NewGuid().ToString());
         }
 
-        public static List<Comment> GetMockCommentModelsList(List<string> commentList)
+        public static List<Comment> GetMockCommentModelsList(
+            List<string> commentList,
+            string postId
+        )
         {
-            var postId = GetMockCreateCommentRequestDto().PostId;
             var list = new List<Comment>();
             foreach (var item in commentList)
             {
@@ -145,6 +147,47 @@
                 );
             }
             return list;
+        }
+
+        public static CreateCommentDto GetMockCreateCommentDto()
+        {
+            return new CreateCommentDto
+            {
+                PromptText = "This is a mock user prompt.",
+                PostId = Guid.NewGuid().ToString(),
+                ParentCommentId = null,
+            };
+        }
+
+        public static ReplyDto GetMockReplyDto()
+        {
+            return new ReplyDto
+            {
+                Content = "This is a mock reply.",
+                ParentCommentId = Guid.NewGuid().ToString(),
+            };
+        }
+
+        public static Comment GetMockCommentFromReplyDto(ReplyDto replyDto)
+        {
+            return new Comment
+            {
+                Id = Guid.NewGuid().ToString(),
+                Content = replyDto.Content,
+                CreatedAt = DateTime.Now,
+                ParentCommentId = replyDto.ParentCommentId,
+                PostId = Guid.NewGuid().ToString(),
+            };
+        }
+
+        public static CreateCommentDto GetMockCreateCommentDto(CommentDto commentDto)
+        {
+            return new CreateCommentDto
+            {
+                PromptText = commentDto.Content,
+                PostId = commentDto.PostId,
+                ParentCommentId = commentDto.ParentCommentId,
+            };
         }
     }
 }

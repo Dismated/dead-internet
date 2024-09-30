@@ -15,7 +15,7 @@ namespace DeadInternet.Server.Interfaces
 
         Task<List<CommentDto>> GetRepliesDtoAsync(string postId);
 
-        Comment? GetOldestByPostId(string postId);
+        Task<Comment?> GetOldestByPostIdAsync(string postId);
 
         Task<List<Comment>> GetRepliesAsync(string postId);
 

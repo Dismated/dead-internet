@@ -1,4 +1,7 @@
-﻿namespace DeadInternet.Tests.MockData
+﻿using DeadInternet.Server.Dtos.Account;
+using DeadInternet.Server.Models;
+
+namespace DeadInternet.Tests.MockData
 {
     internal class UserMockData
     {
@@ -9,6 +12,16 @@
                 UserName = "username",
                 PasswordHash = "password",
                 Email = "test@test.com",
+            };
+        }
+
+        public static AppUser GetMockUser(RegisterDto registerDto)
+        {
+            return new AppUser
+            {
+                UserName = registerDto.Username,
+                PasswordHash = registerDto.Password,
+                Email = registerDto.Email,
             };
         }
 
@@ -25,16 +38,6 @@
         public static LoginDto GetMockLoginDto()
         {
             return new LoginDto { Username = "username", Password = "password" };
-        }
-
-        public static LoginDto GetMockLoginWrongUsernameDto()
-        {
-            return new LoginDto { Username = "wrongusername", Password = "password" };
-        }
-
-        public static LoginDto GetMockLoginWrongPasswordDto()
-        {
-            return new LoginDto { Username = "username", Password = "wrongpassword" };
         }
 
         public static RegisterDto GetMockRegisterDto()

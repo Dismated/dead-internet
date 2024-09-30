@@ -1,5 +1,8 @@
 ﻿using System.Security.Claims;
 using DeadInternet.Server.Dtos.AppUser;
+using DeadInternet.Server.Dtos.Comment;
+using DeadInternet.Server.Dtos.Common;
+using DeadInternet.Server.Dtos.Post;
 using DeadInternet.Server.Exceptions.Base;
 using DeadInternet.Server.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +25,7 @@ namespace DeadInternet.Server.Controllers
 
             var posts = await _postService.GetUserPostsAsync(userId);
 
-            return Ok(posts);
+            return Ok(new ApiResponse<List<PostDto>>(posts));
         }
 
         [Authorize]
@@ -35,7 +38,7 @@ namespace DeadInternet.Server.Controllers
 
             var postPage = await _postService.GetInitialPostPageAsync(userId, promptDto.Prompt);
 
-            return Ok(postPage);
+            return Ok(new ApiResponse<PromptNRepliesDto>(postPage));
         }
 
         [Authorize]
@@ -43,7 +46,7 @@ namespace DeadInternet.Server.Controllers
         public async Task<IActionResult> DeletePost(string id)
         {
             await _postService.DeletePostAsync(id);
-            return Ok(new { message = "Post deleted successfully" });
+            return Ok(new MessageResponse("Post deleted successfully!"));
         }
     }
 }

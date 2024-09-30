@@ -27,25 +27,20 @@ namespace DeadInternet.Server.Services
             return await _commentRepo.CreatePromptAsync(promptModel);
         }
 
-        public async Task CreateCommentsAsync(
-            string promptText,
-            string postId,
-            string parentCommentId
-        )
+        public async Task CreateCommentsAsync(CreateCommentDto createCommentDto)
         {
-            var aiComments = await _LLMService.GenerateCommentAsync(promptText);
+            var aiComments = await _LLMService.GenerateCommentAsync(createCommentDto.PromptText);
             var savedComments = new List<CommentDto>();
-
             foreach (var comment in aiComments)
             {
                 if (savedComments.Count != 0)
                 {
-                    parentCommentId = savedComments.Last().Id;
+                    createCommentDto.ParentCommentId = savedComments.Last().Id;
                 }
                 var commentModel = _commentMapper.ToCommentFromCreateDto(
                     comment,
-                    postId,
-                    parentCommentId
+                    createCommentDto.PostId,
+                    createCommentDto.ParentCommentId
                 );
                 await _commentRepo.CreateAsync(commentModel);
                 savedComments.Add(_commentMapper.ToCommentDto(commentModel));
@@ -64,10 +59,11 @@ namespace DeadInternet.Server.Services
             return commentDtos;
         }
 
-        public CommentDto GetPromptDto(string postId)
+        public async Task<CommentDto> GetPromptDtoAsync(string postId)
         {
             var prompt =
-                _commentRepo.GetOldestByPostId(postId) ?? throw new NotFoundException("Prompt");
+                await _commentRepo.GetOldestByPostIdAsync(postId)
+                ?? throw new NotFoundException("Prompt");
             return _commentMapper.ToCommentDto(prompt);
         }
 

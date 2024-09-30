@@ -1,5 +1,9 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using DeadInternet.Server.Services;
 using DeadInternet.Tests.MockData;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using NSubstitute;
 
 namespace Token.Tests.Services
