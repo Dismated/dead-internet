@@ -10,9 +10,9 @@
         <small><label for="password" class="ms-2">Password</label></small>
         <input type="password" class="form-control" style="padding: 9px 12px;" id="password" formControlName="password" required>
       </div>
-      <button type="submit" class="btn btn-light mt-3 mb-2" [disabled]="loginForm.invalid">Login</button>
+      <app-button [submitType]="true" btnClass="btn btn-light mt-3 mb-2" [disabled]="loginForm.invalid">Login</app-button>
     </form>
-    <div><small>Don't want to register? </small><small><span class="text-button-blue" (click)="onGuestLoginClick()">Login as a Guest</span></small></div>
-    <div><small>Don't have an account? </small><small><span class="text-button-blue" (click)="onRegisterClick()">Register</span></small></div>
+    <div><small>Don't want to register? </small><small><app-text-button btnClass="text-button-blue" (clickEvent)="onGuestLoginClick()">Login as a Guest</app-text-button></small></div>
+    <div><small>Don't have an account? </small><small><app-text-button btnClass="text-button-blue" (clickEvent)="onRegisterClick()">Register</app-text-button></small></div>
   </div>
 </div>

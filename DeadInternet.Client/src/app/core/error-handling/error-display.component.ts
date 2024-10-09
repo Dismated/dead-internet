@@ -7,7 +7,7 @@ import { NavigationStart, Router } from '@angular/router';
   template: `
     <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
       <strong>Error!</strong> {{ errorMessage }}
-      <button (click)="closeError()">Close</button>
+      <app-button (clickEvent)="closeError()">Close</app-button>
     </div>
   `,
   styles: []

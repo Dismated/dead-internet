@@ -26,9 +26,9 @@
           <app-error-popup [error]="'Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long.'"></app-error-popup>
         </div>
       </div>
-      <button type="submit" class="btn btn-light mt-3 mb-2" [disabled]="registerForm.invalid">Register</button>
+      <app-button typeSubmit="true" btnClass="btn btn-light mt-3 mb-2" [disabled]="registerForm.invalid">Register</app-button>
     </form>
-    <div><small>Don't want to register? </small><small><span class="text-button-blue" (click)="onGuestLoginClick()">Login as a Guest</span></small></div>
-    <div><small>Have an account? </small><small><span class="text-button-blue" (click)="onLoginClick()">Login</span></small></div>
+    <div><small>Don't want to register? </small><small><app-text-button btnClass="text-button-blue" (clickEvent)="onGuestLoginClick()">Login as a Guest</app-text-button></small></div>
+    <div><small>Have an account? </small><small><app-text-button btnClass="text-button-blue" (clickEvent)="onLoginClick()">Login</app-text-button></small></div>
   </div>
 </div>
