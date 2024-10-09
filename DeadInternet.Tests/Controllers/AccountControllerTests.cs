@@ -39,7 +39,7 @@ namespace DeadInternet.Tests.Controllers
         }
 
         [Fact]
-        public async Task Register_ReturnsOk_WithSuccessMessage()
+        public async Task Register_ReturnsOk_WithMessage()
         {
             //Arrange
             var message = "Account created successfully!";
@@ -75,8 +75,8 @@ namespace DeadInternet.Tests.Controllers
 
             //Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var tokenResult = Assert.IsType<ApiResponse<string>>(okResult.Value);
-            Assert.Equal(token, tokenResult.Data);
+            var tokenResult = Assert.IsType<ApiResponse<TokenResponse>>(okResult.Value);
+            Assert.Equal(token, tokenResult.Data.Token);
         }
     }
 }

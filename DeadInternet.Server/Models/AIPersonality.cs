@@ -6,7 +6,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
-        public int Votes { get; set; }
-        public List<Post> Answers { get; set; }
+        public int Score { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

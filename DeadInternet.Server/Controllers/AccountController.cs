@@ -32,7 +32,7 @@ namespace DeadInternet.Server.Controllers
 
             var user = await _accountService.GetUserByUsernameAsync(guest.Username);
             var token = _accountService.CreateToken(user);
-            return Ok(new ApiResponse<string>(token));
+            return Ok(new ApiResponse<TokenResponse>(new TokenResponse(token)));
         }
     }
 }
