@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class ButtonComponent implements OnInit {
   @Input() submitType: boolean = false;
   @Input() btnClass: string = '';
-  @Input() btnStyles: { [key: string]: any } = {};
+  @Input() btnStyles: { [key: string]: string } = {};
   @Input() disabled: boolean = false;
 
   @Output() clickEvent = new EventEmitter<Event>();
@@ -17,6 +17,7 @@ export class ButtonComponent implements OnInit {
 
   ngOnInit(): void {
     this.attrType = this.submitType ? 'submit' : 'button';
+    console.log(this.btnStyles, this.btnClass);
   }
   onClick(event: Event) {
     if (!this.disabled) {

@@ -20,7 +20,7 @@
           </div>
           <div>
             <small>
-              <app-text-button (clickEvent)="deletePost(post.id)" btnStyle="color: var(--bs-secondary-color)">delete</app-text-button>
+              <app-text-button (clickEvent)="deletePost(post.id)" [btnStyles]="{'color': 'var(--bs-secondary-color)'}">delete</app-text-button>
             </small>
           </div>
         </div>

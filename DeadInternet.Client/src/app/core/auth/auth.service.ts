@@ -4,7 +4,9 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 interface AuthResponse {
-  token: string;
+  data: {
+    token: string
+  }
 }
 
 @Injectable({
@@ -38,14 +40,18 @@ export class AuthService {
   guestLogin(): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/guest/login`, {})
       .pipe(
-        tap(res => this.handleAuthResponse(res))
+        tap(res => {
+          console.log(res, res.data.token, 1);
+          this.handleAuthResponse(res)
+        })
       );
   }
 
   private handleAuthResponse(res: AuthResponse) {
-    if (res && res.token) {
-      localStorage.setItem('token', res.token);
+    if (res && res.data.token) {
+      localStorage.setItem('token', res.data.token);
       this.isAuthenticatedSubject.next(true);
+      console.log(this.isAuthenticatedSubject.value);
     }
   }
 

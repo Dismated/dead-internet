@@ -9,7 +9,7 @@
               [placeholder]="placeholder"
               style="overflow:hidden; resize:none; border-top-right-radius:0; border-bottom-right-radius:0"
               required></textarea>
-    <app-button btnClass="btn btn-light" [disabled]="!promptText" btnStyle="border-top-left-radius: 0; border-bottom-left-radius: 0;" [submitType]="true">Post</app-button>
+    <app-button btnClass="btn btn-light" [disabled]="!promptText" [btnStyles]="{ 'border-top-left-radius': '0', 'border-bottom-left-radius': '0' }" [submitType]="true">Post</app-button>
   </form>
   <app-loading [isLoading]="loading"></app-loading>
   <div *ngIf="response">

@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onGuestLoginClick() {
     this.authService.guestLogin().subscribe((res) => {
-      localStorage.setItem('token', res.token);
+      localStorage.setItem('token', res.data.token);
       this.router.navigate(['/home']);
     })
   }
