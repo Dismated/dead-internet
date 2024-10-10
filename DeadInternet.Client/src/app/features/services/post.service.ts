@@ -10,8 +10,8 @@ export class PostService {
 
   constructor(private http: HttpClient) { }
 
-  getPosts(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl)
+  getPosts(): Observable<any> {
+    return this.http.get<any>(this.apiUrl)
   }
 
   deletePost(id: string): Observable<void> {

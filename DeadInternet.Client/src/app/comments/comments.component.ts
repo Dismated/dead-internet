@@ -37,8 +37,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
           }), finalize(() => this.loading = false)
         ).subscribe(
           res => {
-            this.promptText = res.prompt.content;
-            this.commentData = res.replies;
+            this.promptText = res.data.prompt.content;
+            this.commentData = res.data.replies;
 
           }
         ));

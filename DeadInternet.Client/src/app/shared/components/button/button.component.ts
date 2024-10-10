@@ -17,7 +17,6 @@ export class ButtonComponent implements OnInit {
 
   ngOnInit(): void {
     this.attrType = this.submitType ? 'submit' : 'button';
-    console.log(this.btnStyles, this.btnClass);
   }
   onClick(event: Event) {
     if (!this.disabled) {

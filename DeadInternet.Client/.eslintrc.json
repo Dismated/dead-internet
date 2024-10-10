@@ -42,6 +42,12 @@
         "plugin:@angular-eslint/template/accessibility"
       ],
       "rules": {}
+    },
+    {
+      "files": [ "*.spec.ts" ],
+      "rules": {
+        "@angular-eslint/component-class-suffix": "off"
+      }
     }
   ]
 }

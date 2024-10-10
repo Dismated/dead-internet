@@ -13,7 +13,7 @@ import { ErrorService } from '../../core/error-handling/error.service';
 })
 export class LlmPromptComponent implements OnInit {
   promptText = '';
-  response = '';
+  response: any = '';
   errorMessage = '';
   spaces: string = " "
   placeholder: string = `Create a post ${this.spaces} (Shift + Enter for new line)`
@@ -45,8 +45,9 @@ export class LlmPromptComponent implements OnInit {
           finalize(() => this.loading = false))
         .subscribe(
           (res: any) => {
-            this.response = res.response;
-            this.router.navigate(['/comments', res.prompt.postId]);
+            console.log(res)
+            this.response = res.data;
+            this.router.navigate(['/comments', this.response.prompt.postId]);
           }
         );
     }

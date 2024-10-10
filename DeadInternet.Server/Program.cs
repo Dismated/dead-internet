@@ -22,8 +22,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddKernel();
 builder.Services.AddOpenAIChatCompletion(
     modelId: "second-state/Mistral-Nemo-Instruct-2407-GGUF/Mistral-Nemo-Instruct-2407-Q4_0.gguf",
-    apiKey: "LLM_API_KEY",
-    endpoint: new Uri("http://localhost:1234/v1/chat/completions")
+    apiKey: "lm-studio",
+    endpoint: new Uri("http://localhost:1234/v1")
 );
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
