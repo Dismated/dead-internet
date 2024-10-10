@@ -1,7 +1,6 @@
 <div class="mb-3">
-  <form (ngSubmit)="onSubmit()"
-        class="d-flex justify-content-start w-50">
-    <textarea type="text" [(ngModel)]="promptText"
+  <form (ngSubmit)="onSubmit()" class="d-flex justify-content-start w-50">
+    <textarea [(ngModel)]="promptText"
               class="form-control"
               rows="1"
               (keydown)="handleKeyDown($event)"
@@ -9,7 +8,10 @@
               [placeholder]="placeholder"
               style="overflow:hidden; resize:none; border-top-right-radius:0; border-bottom-right-radius:0"
               required></textarea>
-    <app-button btnClass="btn btn-light" [disabled]="!promptText" [btnStyles]="{ 'border-top-left-radius': '0', 'border-bottom-left-radius': '0' }" [submitType]="true">Post</app-button>
+    <app-button btnClass="btn btn-light"
+                [disabled]="!promptText || loading"
+                [btnStyles]="{ 'border-top-left-radius': '0', 'border-bottom-left-radius': '0' }"
+                [submitType]="true">Post</app-button>
   </form>
   <app-loading [isLoading]="loading"></app-loading>
   <div *ngIf="response">

@@ -10,6 +10,9 @@ export class PostService {
 
   constructor(private http: HttpClient) { }
 
+  createPost(prompt: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/prompt`, prompt)
+  }
   getPosts(): Observable<any> {
     return this.http.get<any>(this.apiUrl)
   }

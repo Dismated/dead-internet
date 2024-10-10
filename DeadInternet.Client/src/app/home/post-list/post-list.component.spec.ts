@@ -58,7 +58,6 @@ describe('PostListComponent', () => {
     }).compileComponents();
 
     postServiceSpy = TestBed.inject(PostService) as jasmine.SpyObj<PostService>;
-    errorServiceSpy = TestBed.inject(ErrorService) as jasmine.SpyObj<ErrorService>;
   });
 
   beforeEach(() => {
