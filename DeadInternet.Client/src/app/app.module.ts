@@ -18,10 +18,8 @@ import { LoadingComponent } from './core/loading/loading.component';
 import { ButtonComponent } from './shared/components/button/button.component';
 import { TextButtonComponent } from './shared/components/text-button/text-button.component';
 import { PostItemComponent } from './home/post-item/post-item.component';
-
-
-
-
+import { FormInputComponent } from './shared/components/form-input/form-input.component';
+import { AuthFormComponent } from './features/auth/auth-form/auth-form.component
 
 @NgModule({
   declarations: [
@@ -37,7 +35,9 @@ import { PostItemComponent } from './home/post-item/post-item.component';
     LoadingComponent,
     ButtonComponent,
     TextButtonComponent,
-    PostItemComponent
+    PostItemComponent,
+    FormInputComponent,
+    AuthFormComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule,

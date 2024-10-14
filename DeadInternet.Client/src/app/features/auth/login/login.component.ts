@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/auth/auth.service';
 import { Router } from '@angular/router';
-import { AuthResponse } from '../../../models/auth-response.interface';
 import { Subscription, catchError, throwError } from 'rxjs';
 import { ErrorService } from '../../../core/error-handling/error.service';
 

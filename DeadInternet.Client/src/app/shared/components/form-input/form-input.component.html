@@ -1,0 +1,13 @@
+<div class="form-group d-flex flex-column align-items-start position-relative">
+  <small><label [for]="label" class="ms-2">{{ label }}</label></small>
+  <input [type]="type"
+         [id]="label"
+         class="form-control"
+         style="padding: 9px 12px;"
+         [ngModel]="value"
+         (ngModelChange)="onInput($event)"
+         (blur)="onBlur()">
+  <div *ngIf="showError && error">
+    <app-error-popup [error]="error"></app-error-popup>
+  </div>
+</div>

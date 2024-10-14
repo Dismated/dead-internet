@@ -53,7 +53,7 @@ describe('PostListComponent', () => {
       ],
       providers: [
         { provide: PostService, useValue: postServiceSpyObj },
-        { provide: ErrorService, useValue: errorServiceSpyObj }
+        { provide: ErrorService, useValue: errorServiceSpyObj },
       ]
     }).compileComponents();
 

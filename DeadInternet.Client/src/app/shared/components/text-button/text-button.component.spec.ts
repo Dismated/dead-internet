@@ -1,4 +1,4 @@
-import { ComponentFixture, ComponentFixtureAutoDetect, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { TextButtonComponent } from './text-button.component';
 
@@ -10,7 +10,6 @@ describe('ButtonComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TextButtonComponent],
-      providers: [{ provide: [ComponentFixtureAutoDetect], useValue: true }]
     }).compileComponents();
   });
 
