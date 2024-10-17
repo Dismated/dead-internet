@@ -55,7 +55,7 @@ describe('PostService', () => {
     const dummyId = '1';
 
     service.deletePost(dummyId).subscribe(response => {
-      expect(response).toBeUndefined();
+      expect(response).toBeNull();
     });
 
     const req = httpMock.expectOne('https://localhost:7201/api/home/1');
