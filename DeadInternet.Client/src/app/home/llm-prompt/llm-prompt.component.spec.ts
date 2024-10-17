@@ -41,6 +41,7 @@ describe('LlmPromptComponent', () => {
   let httpMock: HttpTestingController;
   let postServiceSpy: jasmine.SpyObj<PostService>;
   let router: Router;
+  let debugEl: any;
 
 
   beforeEach(async () => {
@@ -67,6 +68,8 @@ describe('LlmPromptComponent', () => {
     router = TestBed.inject(Router);
 
     fixture.detectChanges();
+
+    debugEl = fixture.debugElement
 
   });
 
@@ -126,7 +129,7 @@ describe('LlmPromptComponent', () => {
     const event = new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true });
     const preventDefaultSpy = spyOn(event, 'preventDefault').and.callThrough();
 
-    const textarea = fixture.debugElement.query(By.css('textarea')).nativeElement;
+    const textarea = debugEl.query(By.css('textarea')).nativeElement;
     textarea.value = 'Test prompt';
     component.promptText = 'Test prompt';
     textarea.dispatchEvent(event);
@@ -140,7 +143,7 @@ describe('LlmPromptComponent', () => {
     const preventDefaultSpy = spyOn(event, 'preventDefault').and.callThrough();
     spyOn(component, 'onSubmit');
 
-    const textarea = fixture.debugElement.query(By.css('textarea')).nativeElement;
+    const textarea = debugEl.query(By.css('textarea')).nativeElement;
     component.promptText = 'Test';
     textarea.dispatchEvent(event);
 
@@ -149,7 +152,7 @@ describe('LlmPromptComponent', () => {
   });
 
   it('should resize textarea correctly', () => {
-    const textarea = fixture.debugElement.query(By.css('textarea')).nativeElement;
+    const textarea = debugEl.query(By.css('textarea')).nativeElement;
 
     // Set initial value and simulate the textarea's scrollHeight
     textarea.value = 'This is a test content that should change the height';

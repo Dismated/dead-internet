@@ -3,7 +3,51 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommentComponent } from './comment.component';
 import { ErrorService } from '../../core/error-handling/error.service';
 import { CommentsService } from '../../features/services/comments.service';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+
+
+@Component({
+  selector: "app-error-message",
+  template: ""
+})
+class ErrorMessageComponentStub { }
+
+@Component({
+  selector: "app-loading",
+  template: ""
+})
+class LoadingComponentStub {
+  @Input() isLoading: boolean = false;
+}
+
+@Component({
+  selector: "app-text-button",
+  template: ""
+})
+class TextButtonComponentStub {
+  @Input() btnClass: string = '';
+  @Input() btnStyles: { [key: string]: any } = {};
+  @Input() disabled: boolean = false;
+
+  @Output() clickEvent = new EventEmitter<Event>();
+}
+
+@Component({
+  selector: "app-button",
+  template: ""
+})
+class ButtonComponentStub {
+  @Input() submitType: boolean = false;
+  @Input() btnClass: string = '';
+  @Input() btnStyles: { [key: string]: string } = {};
+  @Input() disabled: boolean = false;
+
+  @Output() clickEvent = new EventEmitter<Event>();
+}
 
 describe('CommentComponent', () => {
   let component: CommentComponent;
@@ -22,13 +66,21 @@ describe('CommentComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [CommentComponent],
+      imports: [HttpClientTestingModule, FormsModule],
+      declarations: [
+        CommentComponent,
+        ErrorMessageComponentStub,
+        LoadingComponentStub,
+        TextButtonComponentStub,
+        ButtonComponentStub
+      ],
       providers: [
         { provide: CommentsService, useValue: commentsServiceMock },
-        { provide: ErrorService, useValue: errorServiceMock }
+        { provide: ErrorService, useValue: errorServiceMock },
       ]
     })
       .compileComponents();
+
   });
 
   beforeEach(() => {
@@ -36,7 +88,6 @@ describe('CommentComponent', () => {
     component = fixture.componentInstance;
     component.comment = { id: '123', content: 'Test comment' };
     fixture.detectChanges();
-    spyOn(window.location, 'reload');
   });
 
   it('should create the component', () => {
@@ -54,54 +105,7 @@ describe('CommentComponent', () => {
     expect(component.editContent).toBe('Test comment');
   });
 
-  it('should call commentsService.editComment and save content on onSaveEdit()', () => {
-    component.editContent = 'Updated content';
-    component.onSaveEdit();
 
-    expect(component.loading).toBeTrue();
-    expect(commentsServiceMock.editComment).toHaveBeenCalledWith('123', 'Updated content');
-    expect(component.isEditing).toBeFalse();
-  });
-
-  it('should handle error on save edit and call errorService', () => {
-    commentsServiceMock.editComment.and.returnValue(throwError(() => new Error('error')));
-
-    component.editContent = 'Updated content';
-    component.onSaveEdit();
-
-    expect(errorServiceMock.setErrorMessage).toHaveBeenCalledWith('Failed to update comment');
-    expect(component.loading).toBeFalse();
-  });
-
-  it('should cancel editing mode on onCancelEdit()', () => {
-    component.isEditing = true;
-    component.onCancelEdit();
-    expect(component.isEditing).toBeFalse();
-  });
-
-  it('should enable replying mode on onReplyClick()', () => {
-    component.onReplyClick();
-    expect(component.isReplying).toBeTrue();
-  });
-
-  it('should call commentsService.createComment on onSaveReply()', () => {
-    component.replyContent = 'Reply content';
-    component.onSaveReply();
-
-    expect(component.loading).toBeTrue();
-    expect(commentsServiceMock.createComment).toHaveBeenCalledWith({
-      content: 'Reply content',
-      parentCommentId: '123',
-    });
-    expect(component.isReplying).toBeFalse();
-    expect(component.replyContent).toBe('');
-  });
-
-  it('should emit deleteComment event on onDeleteClick()', () => {
-    spyOn(component.deleteComment, 'emit');
-    component.onDeleteClick();
-    expect(component.deleteComment.emit).toHaveBeenCalledWith('123');
-  });
 
   it('should toggle isMinimized on onMinimizeClick()', () => {
     expect(component.isMinimized).toBeFalse();

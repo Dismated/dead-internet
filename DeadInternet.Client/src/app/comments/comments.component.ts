@@ -45,6 +45,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
     }
     else {
       this.errorService.setErrorMessage('No post ID provided');
+      this.loading = false;
     }
   }
 

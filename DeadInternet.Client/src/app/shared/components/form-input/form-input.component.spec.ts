@@ -19,6 +19,7 @@ class ErrorPopupComponentStub {
 describe('FormInputComponent', () => {
   let component: FormInputComponent;
   let fixture: ComponentFixture<FormInputComponent>;
+  let debugEl: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -29,6 +30,8 @@ describe('FormInputComponent', () => {
     fixture = TestBed.createComponent(FormInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    debugEl = fixture.debugElement;
   });
 
   it('should create', () => {
@@ -42,9 +45,9 @@ describe('FormInputComponent', () => {
     component.showError = true;
     fixture.detectChanges();
 
-    const labelElement = fixture.debugElement.query(By.css('label')).nativeElement;
-    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
-    const errorPopup = fixture.debugElement.query(By.css('app-error-popup'));
+    const labelElement = debugEl.query(By.css('label')).nativeElement;
+    const inputElement = debugEl.query(By.css('input')).nativeElement;
+    const errorPopup = debugEl.query(By.css('app-error-popup'));
 
     expect(labelElement.textContent).toContain('Email Address');
     expect(inputElement.type).toBe('email');
@@ -53,7 +56,7 @@ describe('FormInputComponent', () => {
   });
 
   it('should call onInput and update value when input changes', () => {
-    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+    const inputElement = debugEl.query(By.css('input')).nativeElement;
     inputElement.value = 'test@example.com';
     inputElement.dispatchEvent(new Event('input'));
     fixture.detectChanges();
@@ -63,7 +66,7 @@ describe('FormInputComponent', () => {
 
   it('should call onBlur when input loses focus', () => {
     spyOn(component, 'onTouched');
-    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+    const inputElement = debugEl.query(By.css('input')).nativeElement;
     inputElement.dispatchEvent(new Event('blur'));
     fixture.detectChanges();
 
@@ -93,7 +96,7 @@ describe('FormInputComponent', () => {
     component.showError = false;
     fixture.detectChanges();
 
-    const errorPopup = fixture.debugElement.query(By.css('app-error-popup'));
+    const errorPopup = debugEl.query(By.css('app-error-popup'));
     expect(errorPopup).toBeFalsy();
   });
 
@@ -102,7 +105,7 @@ describe('FormInputComponent', () => {
     component.showError = true;
     fixture.detectChanges();
 
-    const errorPopup = fixture.debugElement.query(By.css('app-error-popup'));
+    const errorPopup = debugEl.query(By.css('app-error-popup'));
     expect(errorPopup).toBeTruthy();
     expect(errorPopup.componentInstance.error).toBe('Test Error');
   });
