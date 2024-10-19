@@ -1,7 +1,7 @@
 <div class="d-flex align-items-center justify-content-center vh-100">
   <div class="auth-container">
     <h2 class="mb-3">Login</h2>
-    <app-auth-form [form]="loginForm" (onSubmit)="onSubmit()"></app-auth-form>
+    <app-auth-form [form]="loginForm" (submitForm)="onSubmit()"></app-auth-form>
     <div><small>Don't want to register? </small><small><app-text-button btnClass="text-button-blue" (clickEvent)="onGuestLoginClick()">Login as a Guest</app-text-button></small></div>
     <div><small>Don't have an account? </small><small><app-text-button btnClass="text-button-blue" (clickEvent)="onRegisterClick()">Register</app-text-button></small></div>
   </div>

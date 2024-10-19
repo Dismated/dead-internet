@@ -21,6 +21,13 @@ export class ButtonComponent implements OnInit {
   onClick(event: Event) {
     if (!this.disabled) {
       this.clickEvent.emit(event);
+      if (this.attrType === 'submit') {
+        event.preventDefault();
+        const form = (event.target as HTMLButtonElement).form;
+        if (form) {
+          form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        }
+      }
     }
   }
 }

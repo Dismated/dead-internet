@@ -11,6 +11,13 @@ export class AuthFormComponent {
   @Input() formType: 'register' | 'login' = 'login';
   @Output() submitForm = new EventEmitter<void>();
 
+  submitButtonText = () => this.formType.charAt(0).toUpperCase() + this.formType.slice(1);
+
+  onSubmit() {
+    if (this.form.valid) {
+      this.submitForm.emit();
+    }
+  }
 
   getErrorMessage(controlName: string): string {
     const control = this.form.get(controlName);
