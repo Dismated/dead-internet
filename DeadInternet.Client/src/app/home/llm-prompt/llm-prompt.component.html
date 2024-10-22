@@ -1,16 +1,15 @@
 <div class="mb-3">
   <form (ngSubmit)="onSubmit()" class="d-flex justify-content-start w-50">
-    <textarea [(ngModel)]="promptText"
-              class="form-control"
-              rows="1"
-              (keydown)="handleKeyDown($event)"
-              name="promptText"
-              [placeholder]="placeholder"
-              style="overflow:hidden; resize:none; border-top-right-radius:0; border-bottom-right-radius:0"
-              required></textarea>
+    <app-adjustable-textarea [(ngModel)]="promptText"
+                             placeholderStart="Create a post"
+                             (textSubmit)="onSubmit()"
+                             name="promptText"
+                             class="w-100"
+                             [textareaStyles]="{'border-top-right-radius':'0', 'border-bottom-right-radius':'0'}">
+    </app-adjustable-textarea>
     <app-button btnClass="btn btn-light"
                 [disabled]="!promptText || loading"
-                [btnStyles]="{ 'border-top-left-radius': '0', 'border-bottom-left-radius': '0' }"
+                [btnStyles]="{ 'border-top-left-radius': '0', 'border-bottom-left-radius': '0', 'height': '100%' }"
                 [submitType]="true">Post</app-button>
   </form>
   <app-loading [isLoading]="loading"></app-loading>

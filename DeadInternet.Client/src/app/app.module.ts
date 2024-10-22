@@ -19,7 +19,8 @@ import { ButtonComponent } from './shared/components/button/button.component';
 import { TextButtonComponent } from './shared/components/text-button/text-button.component';
 import { PostItemComponent } from './home/post-item/post-item.component';
 import { FormInputComponent } from './shared/components/form-input/form-input.component';
-import { AuthFormComponent } from './features/auth/auth-form/auth-form.component'
+import { AuthFormComponent } from './features/auth/auth-form/auth-form.component';
+import { AdjustableTextareaComponent } from './shared/components/adjustable-textarea/adjustable-textarea.component'
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AuthFormComponent } from './features/auth/auth-form/auth-form.component
     PostItemComponent,
     FormInputComponent,
     AuthFormComponent,
+    AdjustableTextareaComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule,
