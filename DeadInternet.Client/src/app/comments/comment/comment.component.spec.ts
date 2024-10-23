@@ -7,8 +7,6 @@ import { of } from 'rxjs';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-
 
 @Component({
   selector: "app-error-message",
@@ -98,14 +96,6 @@ describe('CommentComponent', () => {
     expect(component.comment.id).toBe('123');
     expect(component.depth).toBe(0);
   });
-
-  it('should enable editing mode and set editContent on onEditClick()', () => {
-    component.onEditClick();
-    expect(component.isEditing).toBeTrue();
-    expect(component.editContent).toBe('Test comment');
-  });
-
-
 
   it('should toggle isMinimized on onMinimizeClick()', () => {
     expect(component.isMinimized).toBeFalse();

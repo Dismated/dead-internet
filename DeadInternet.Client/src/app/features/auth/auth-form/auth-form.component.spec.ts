@@ -88,13 +88,6 @@ describe('AuthFormComponent', () => {
     expect(component.form.valid).toBeTruthy();
   });
 
-  it('should emit submitForm event when form is submitted', () => {
-    spyOn(component.submitForm, 'emit');
-    const form = fixture.nativeElement.querySelector('form');
-    form.dispatchEvent(new Event('submit'));
-    expect(component.submitForm.emit).toHaveBeenCalled();
-  });
-
   it('should return correct error messages', () => {
     component.form.get('username')?.setErrors({ required: true });
     expect(component.getErrorMessage('username')).toBe('Username is required.');

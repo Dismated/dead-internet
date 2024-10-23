@@ -24,9 +24,9 @@ export class AdjustableTextareaComponent implements AfterViewInit, OnInit, OnDes
   placeholder: string = ''
   placeholderStartLength = 0
 
-  private resizeObserver!: ResizeObserver;
-  private onChange: (value: string) => void = () => { };
-  private onTouched: () => void = () => { };
+  resizeObserver!: ResizeObserver;
+  onChange: (value: string) => void = () => { };
+  onTouched: () => void = () => { };
 
   constructor(private elementRef: ElementRef, private ngZone: NgZone) { }
 
@@ -64,7 +64,7 @@ export class AdjustableTextareaComponent implements AfterViewInit, OnInit, OnDes
     }
   }
 
-  private adjustHeight() {
+  adjustHeight() {
     const textarea = this.textareaRef.nativeElement;
     textarea.style.height = 'auto';
     if (!textarea.value.trim()) {
@@ -74,7 +74,7 @@ export class AdjustableTextareaComponent implements AfterViewInit, OnInit, OnDes
     }
   }
 
-  private setupResizeObserver() {
+  setupResizeObserver() {
     this.resizeObserver = new ResizeObserver(() => {
       this.ngZone.run(() => {
         this.adjustHeight();

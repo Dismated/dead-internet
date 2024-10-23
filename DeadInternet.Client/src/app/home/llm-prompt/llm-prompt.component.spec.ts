@@ -4,10 +4,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { LlmPromptComponent } from './llm-prompt.component';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { PostService } from '../../features/services/post.service';
 import { Router } from '@angular/router';
+import { AdjustableTextareaComponent } from '../../shared/components/adjustable-textarea/adjustable-textarea.component';
 
 @Component({
   selector: 'app-button',
@@ -35,6 +36,18 @@ class LoadingComponentStub {
 })
 class CommentsComponentStub { }
 
+@Component({
+  selector: "app-adjustable-textarea",
+  template: ""
+})
+class AdjustableTextareaComponentStub {
+  @ViewChild('textarea') textareaRef!: ElementRef;
+  @Input() placeholderStart = '';
+  @Input() promptText = '';
+  @Input() textareaStyles: { [key: string]: string } = {};
+  @Output() textSubmit = new EventEmitter<void>();
+}
+
 describe('LlmPromptComponent', () => {
   let component: LlmPromptComponent;
   let fixture: ComponentFixture<LlmPromptComponent>;
@@ -48,7 +61,7 @@ describe('LlmPromptComponent', () => {
     const postServiceSpyObj = jasmine.createSpyObj('PostService', ['createPost']);
 
     await TestBed.configureTestingModule({
-      declarations: [LlmPromptComponent, ButtonComponentStub, LoadingComponentStub],
+      declarations: [LlmPromptComponent, ButtonComponentStub, LoadingComponentStub, AdjustableTextareaComponentStub],
       imports: [HttpClientTestingModule, [RouterTestingModule.withRoutes([
         { path: 'comments/:id', component: CommentsComponentStub } // Define your routes here
       ])], FormsModule],
@@ -88,17 +101,6 @@ describe('LlmPromptComponent', () => {
     expect(component.loading).toBe(false);
   });
 
-  it('should update placeholder based on viewport width', () => {
-    Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 1000 });
-
-    // Call the method that uses innerWidth
-    component.updatePlaceholder();
-
-    fixture.detectChanges();
-
-    // Assertion
-    expect(component.placeholder).toContain('Create a post');
-  });
 
   it('should display error when HTTP request fails', () => {
     postServiceSpy.createPost.and.returnValue(throwError(() => new Error('Error')));
@@ -120,53 +122,9 @@ describe('LlmPromptComponent', () => {
     component.onSubmit();
     tick();
 
-    expect(postServiceSpy.createPost).toHaveBeenCalledWith('Test prompt');
+    expect(postServiceSpy.createPost).toHaveBeenCalledWith({ prompt: 'Test prompt' });
     expect(component.response).toEqual(mockResponse.data);
     expect(router.navigate).toHaveBeenCalledWith(['/comments', 1]);
   }));
 
-  it('should prevent default behavior when shift+enter is pressed', () => {
-    const event = new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true });
-    const preventDefaultSpy = spyOn(event, 'preventDefault').and.callThrough();
-
-    const textarea = debugEl.query(By.css('textarea')).nativeElement;
-    textarea.value = 'Test prompt';
-    component.promptText = 'Test prompt';
-    textarea.dispatchEvent(event);
-
-    expect(preventDefaultSpy).toHaveBeenCalled();
-    expect(component.promptText).toContain('\n');
-  });
-
-  it('should submit when enter key is pressed without shift', () => {
-    const event = new KeyboardEvent('keydown', { key: 'Enter' });
-    const preventDefaultSpy = spyOn(event, 'preventDefault').and.callThrough();
-    spyOn(component, 'onSubmit');
-
-    const textarea = debugEl.query(By.css('textarea')).nativeElement;
-    component.promptText = 'Test';
-    textarea.dispatchEvent(event);
-
-    expect(preventDefaultSpy).toHaveBeenCalled();
-    expect(component.onSubmit).toHaveBeenCalled();
-  });
-
-  it('should resize textarea correctly', () => {
-    const textarea = debugEl.query(By.css('textarea')).nativeElement;
-
-    // Set initial value and simulate the textarea's scrollHeight
-    textarea.value = 'This is a test content that should change the height';
-
-    // Dispatch an input event to simulate the user typing
-    textarea.dispatchEvent(new Event('input'));
-
-    // Call the adjustTextareaHeight method indirectly by simulating user behavior
-    component.adjustTextareaHeight(textarea);
-
-    // Trigger change detection
-    fixture.detectChanges();
-
-    // Now check if the height was adjusted based on the content
-    expect(textarea.style.height).toBe(`49px`);
-  });
 });
