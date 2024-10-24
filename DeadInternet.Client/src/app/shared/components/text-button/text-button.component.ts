@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class TextButtonComponent {
   @Input() btnClass: string = '';
-  @Input() btnStyles: { [key: string]: any } = {};
+  @Input() btnStyles: { [key: string]: unknown } = {};
   @Input() disabled: boolean = false;
 
   @Output() clickEvent = new EventEmitter<Event>();

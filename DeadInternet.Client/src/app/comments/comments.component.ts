@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CommentsService } from "../features/services/comments.service";
 import { ErrorService } from '../core/error-handling/error.service';
 import { Subscription, catchError, finalize, throwError } from 'rxjs';
+import { Reply } from "../models/comment.model";
 
 
 @Component({
@@ -13,7 +14,7 @@ import { Subscription, catchError, finalize, throwError } from 'rxjs';
 })
 export class CommentsComponent implements OnInit, OnDestroy {
   postId: string | null = null
-  commentData: any = null
+  commentData: Reply[] = []
   promptText = ""
   private errorSubscription: Subscription | undefined;
   private subscriptions = new Subscription();
@@ -37,7 +38,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
           }), finalize(() => this.loading = false)
         ).subscribe(
           res => {
-            this.promptText = res.data.prompt.content;
+            this.promptText = res.data.prompt.content
             this.commentData = res.data.replies;
 
           }
@@ -64,7 +65,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
       });
   }
 
-  private removeCommentRecursively(comments: any, commentId: string): boolean {
+  private removeCommentRecursively(comments: Reply[], commentId: string): boolean {
     for (let i = 0; i < comments.length; i++) {
       if (comments[i].id === commentId) {
         comments.splice(i, 1);

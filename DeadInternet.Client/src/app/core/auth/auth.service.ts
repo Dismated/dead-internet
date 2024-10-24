@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { ResponseMessage } from '../../models/response-message.model';
 
 interface AuthResponse {
   data: {
@@ -26,8 +27,8 @@ export class AuthService {
     this.isAuthenticatedSubject.next(!!token);
   }
 
-  register(username: string, email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, { username, email, password });
+  register(username: string, email: string, password: string): Observable<ResponseMessage> {
+    return this.http.post<ResponseMessage>(`${this.apiUrl}/register`, { username, email, password });
   }
 
   login(username: string, password: string): Observable<AuthResponse> {

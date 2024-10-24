@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PostService } from '../../features/services/post.service';
 import { Subscription, catchError, throwError } from 'rxjs';
 import { ErrorService } from '../../core/error-handling/error.service';
+import { PostData } from '../../models/post.model';
 
 @Component({
   selector: 'app-post-list',
@@ -9,7 +10,7 @@ import { ErrorService } from '../../core/error-handling/error.service';
   styleUrl: './post-list.component.css'
 })
 export class PostListComponent implements OnInit, OnDestroy {
-  posts: any[] = []
+  posts: PostData['data'] = {} as PostData['data'];
   private subscriptions = new Subscription();
 
 
@@ -24,8 +25,7 @@ export class PostListComponent implements OnInit, OnDestroy {
           return throwError(() => error);
         })
       ).subscribe(
-        res => {
-          console.log(res)
+        (res: PostData) => {
           this.posts = res.data
         }
       )

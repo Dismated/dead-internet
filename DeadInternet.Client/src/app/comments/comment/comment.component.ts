@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angu
 import { CommentsService } from '../../features/services/comments.service';
 import { catchError, throwError, finalize } from 'rxjs';
 import { ErrorService } from '../../core/error-handling/error.service';
+import { Reply } from '../../models/comment.model';
 
 @Component({
   selector: 'app-comment',
@@ -9,7 +10,7 @@ import { ErrorService } from '../../core/error-handling/error.service';
   styleUrl: './comment.component.css'
 })
 export class CommentComponent {
-  @Input() comment: any;
+  @Input() comment: Reply = {} as Reply
   @Input() depth: number = 0;
   @Output() deleteComment = new EventEmitter<string>();
 

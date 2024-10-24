@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { catchError, finalize, throwError } from 'rxjs';
 import { ErrorService } from '../../core/error-handling/error.service';
 import { PostService } from '../../features/services/post.service';
+import { Comment } from '../../models/comment.model';
+import { PromptNRepliesData } from '../../models/post.model';
 
 @Component({
   selector: 'app-llm-prompt',
@@ -12,7 +14,7 @@ import { PostService } from '../../features/services/post.service';
 })
 export class LlmPromptComponent {
   promptText = '';
-  response: any = '';
+  response: PromptNRepliesData['data'] = {} as PromptNRepliesData['data'];
   errorMessage = '';
   loading = false;
 
@@ -32,7 +34,7 @@ export class LlmPromptComponent {
         }),
         finalize(() => (this.loading = false))
       )
-      .subscribe((res: any) => this.handleSuccess(res));
+      .subscribe((res: PromptNRepliesData) => this.handleSuccess(res));
   }
 
   private handleError(error: HttpErrorResponse): any {
@@ -44,7 +46,7 @@ export class LlmPromptComponent {
     return throwError(() => error);
   }
 
-  private handleSuccess(res: any): void {
+  private handleSuccess(res: PromptNRepliesData): void {
     this.response = res.data;
     this.router.navigate(['/comments', this.response.prompt.postId]);
   }

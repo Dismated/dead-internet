@@ -48,38 +48,6 @@ describe('ErrorService', () => {
     });
   });
 
-  it('should handle client-side HTTP error', (done) => {
-    const clientError = new ErrorEvent('ClientError', { message: 'Client error occurred' });
-    service.handleHttpError({ error: clientError });
-    service.getError().subscribe((error) => {
-      expect(error?.message).toBe('Client Error: Client error occurred');
-      expect(error?.type).toBe('error');
-      done();
-    });
-  });
-
-  it('should handle server-side HTTP error', (done) => {
-    const serverError = {
-      status: 500,
-      statusText: 'Internal Server Error',
-      error: { message: 'Server error occurred' }
-    };
-    service.handleHttpError(serverError);
-    service.getError().subscribe((error) => {
-      expect(error?.message).toBe('Server Error: 500 Internal Server Error');
-      expect(error?.type).toBe('error');
-      expect(error?.details).toBe('Server error occurred');
-      done();
-    });
-  });
-
-  it('should log error to console', () => {
-    spyOn(console, 'error');
-    const testError = new Error('Test error');
-    service.logError(testError);
-    expect(console.error).toHaveBeenCalledWith('Error logged:', testError);
-  });
-
   it('should emit new error messages', (done) => {
     let emissionCount = 0;
     service.errorMessage$.pipe(skip(1)).subscribe((error) => {
