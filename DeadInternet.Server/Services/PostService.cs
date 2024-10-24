@@ -44,15 +44,22 @@ namespace DeadInternet.Server.Services
         {
             var postId = await GetPostIdAsync(userId, prompt);
             var promptModel = await _commentService.CreatePromptAsync(prompt, postId);
-            var promptDto = _commentService.GetPromptDto(postId);
-            await _commentService.CreateCommentsAsync(prompt, postId, promptModel.Id);
+            var promptDto = await _commentService.GetPromptDtoAsync(postId);
+
+            var createCommentDto = new CreateCommentDto
+            {
+                PromptText = prompt,
+                PostId = postId,
+                ParentCommentId = promptModel.Id,
+            };
+            await _commentService.CreateCommentsAsync(createCommentDto);
 
             return await _commentService.GetPromptNRepliesAsync(promptDto);
         }
 
         public async Task<PromptNRepliesDto> GetPostPageAsync(string postId)
         {
-            var promptDto = _commentService.GetPromptDto(postId);
+            var promptDto = await _commentService.GetPromptDtoAsync(postId);
             return await _commentService.GetPromptNRepliesAsync(promptDto);
         }
     }

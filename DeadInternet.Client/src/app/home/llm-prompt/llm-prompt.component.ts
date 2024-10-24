@@ -1,26 +1,31 @@
-
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
-import { ErrorService } from '../../core/services/error.service';
-
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, finalize, throwError } from 'rxjs';
+import { ErrorService } from '../../core/error-handling/error.service';
+import { PostService } from '../../features/services/post.service';
+import { Comment } from '../../models/comment.model';
+import { PromptNRepliesData } from '../../models/post.model';
 
 @Component({
   selector: 'app-llm-prompt',
   templateUrl: './llm-prompt.component.html',
-  styleUrl: './llm-prompt.component.css'
+  styleUrls: ['./llm-prompt.component.css'] // Note: Fix typo from "styleUrl" to "styleUrls"
 })
-export class LlmPromptComponent implements OnInit {
+export class LlmPromptComponent {
   promptText = '';
-  response = '';
+  response: PromptNRepliesData['data'] = {} as PromptNRepliesData['data'];
   errorMessage = '';
   spaces: string = " "
   placeholder: string = `Create a post ${this.spaces} (Shift + Enter for new line)`
+  loading: boolean = false;
 
+  constructor(private http: HttpClient, private router: Router, private errorService: ErrorService, private postService: PostService) { }
 
-
-  constructor(private http: HttpClient, private router: Router, private errorService: ErrorService) { }
+  onSubmit(): void {
+    if (!this.promptText) return;
+    const prompt = { prompt: this.promptText };
+    this.loading = true;
 
   ngOnInit(): void {
     this.updatePlaceholder();
@@ -28,6 +33,7 @@ export class LlmPromptComponent implements OnInit {
 
   onSubmit() {
     if (this.promptText) {
+      this.loading = true
       this.http.post('https://localhost:7201/api/home/prompt', { prompt: this.promptText })
         .pipe(
           catchError((error: HttpErrorResponse) => {
@@ -40,11 +46,11 @@ export class LlmPromptComponent implements OnInit {
             this.errorService.setErrorMessage(errorMessage);
             return throwError(() => error);
           })
-        )
+          ,
+          finalize(() => this.loading = false))
         .subscribe(
           (res: any) => {
             this.response = res.response;
-            console.log(res);
             this.router.navigate(['/comments', res.prompt.postId]);
           }
         );
@@ -69,19 +75,17 @@ export class LlmPromptComponent implements OnInit {
     }
   }
 
+  private handleError(error: HttpErrorResponse): any {
+    const errorMessage = error.error instanceof ErrorEvent
+      ? `Error: ${error.error.message}`
+      : `Error Code: ${error.status}\nMessage: ${error.message}`;
 
-  adjustTextareaHeight(textarea: HTMLTextAreaElement): void {
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight} px`;
+    this.errorService.setErrorMessage(errorMessage);
+    return throwError(() => error);
   }
 
-  updatePlaceholder(): void {
-    const viewportWidth = window.innerWidth;
-    const numberOfSpaces = Math.floor((viewportWidth / 2 - 380) / 4.4);
-    this.spaces = ' '.repeat(numberOfSpaces);
-
-    this.placeholder = `Create a post ${this.spaces} (Shift + Enter for new line)`
+  private handleSuccess(res: PromptNRepliesData): void {
+    this.response = res.data;
+    this.router.navigate(['/comments', this.response.prompt.postId]);
   }
-
-
 }

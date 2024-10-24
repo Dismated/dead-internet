@@ -5,7 +5,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './features/auth/login/login.component';
-import { HomeComponent } from './home/home.component';
+import { PostListComponent } from './home/post-list/post-list.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
@@ -14,22 +14,26 @@ import { CommentsComponent } from './comments/comments.component';
 import { CommentComponent } from './comments/comment/comment.component';
 import { ErrorMessageComponent } from "./core/error-handling/error-display.component";
 import { ErrorPopupComponent } from './core/error-handling/error-popup/error-popup.component';
-
-
-
-
+import { LoadingComponent } from './core/loading/loading.component';
+import { ButtonComponent } from './shared/components/button/button.component';
+import { TextButtonComponent } from './shared/components/text-button/text-button.component';
+import { PostItemComponent } from './home/post-item/post-item.component';
+import { FormInputComponent } from './shared/components/form-input/form-input.component';
+import { AuthFormComponent } from './features/auth/auth-form/auth-form.component';
+import { AdjustableTextareaComponent } from './shared/components/adjustable-textarea/adjustable-textarea.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent,
+    PostListComponent,
     RegisterComponent,
     LlmPromptComponent,
     CommentsComponent,
     CommentComponent,
     ErrorMessageComponent,
-    ErrorPopupComponent
+    ErrorPopupComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

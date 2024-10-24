@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Comment, CommentInput } from '../../models/comment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,8 @@ export class CommentsService {
 
   constructor(private http: HttpClient) { }
 
-  getComments(id: string | null): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/post/${id}`)
+  getComments(id: string | null): Observable<Comment> {
+    return this.http.get<Comment>(`${this.apiUrl}/post/${id}`)
   }
 
   deleteCommentChain(id: string) {
@@ -24,7 +25,7 @@ export class CommentsService {
     return this.http.put<void>(`${this.apiUrl}/${id}`, payload)
   }
 
-  createComment(payload: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/reply`, payload)
+  createComment(payload: CommentInput): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/reply`, payload)
   }
 }

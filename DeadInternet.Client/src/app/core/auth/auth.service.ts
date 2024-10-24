@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { ResponseMessage } from '../../models/response-message.model';
 
 interface AuthResponse {
-  token: string;
+  data: {
+    token: string
+  }
 }
 
 @Injectable({
@@ -24,8 +27,8 @@ export class AuthService {
     this.isAuthenticatedSubject.next(!!token);
   }
 
-  register(username: string, email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, { username, email, password });
+  register(username: string, email: string, password: string): Observable<ResponseMessage> {
+    return this.http.post<ResponseMessage>(`${this.apiUrl}/register`, { username, email, password });
   }
 
   login(username: string, password: string): Observable<AuthResponse> {
@@ -38,14 +41,18 @@ export class AuthService {
   guestLogin(): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/guest/login`, {})
       .pipe(
-        tap(res => this.handleAuthResponse(res))
+        tap(res => {
+          console.log(res, res.data.token, 1);
+          this.handleAuthResponse(res)
+        })
       );
   }
 
   private handleAuthResponse(res: AuthResponse) {
-    if (res && res.token) {
-      localStorage.setItem('token', res.token);
+    if (res && res.data.token) {
+      localStorage.setItem('token', res.data.token);
       this.isAuthenticatedSubject.next(true);
+      console.log(this.isAuthenticatedSubject.value);
     }
   }
 

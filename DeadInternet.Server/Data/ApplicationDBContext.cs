@@ -12,7 +12,6 @@ namespace DeadInternet.Server.Data
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<AIPersonality> AIPersonalities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

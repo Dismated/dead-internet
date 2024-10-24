@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { PostData, PromptNRepliesData } from '../../models/post.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,11 @@ export class PostService {
 
   constructor(private http: HttpClient) { }
 
-  getPosts(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl)
+  createPost(prompt: { prompt: string }): Observable<PromptNRepliesData> {
+    return this.http.post<PromptNRepliesData>(`${this.apiUrl}/prompt`, prompt)
+  }
+  getPosts(): Observable<PostData> {
+    return this.http.get<PostData>(this.apiUrl)
   }
 
   deletePost(id: string): Observable<void> {

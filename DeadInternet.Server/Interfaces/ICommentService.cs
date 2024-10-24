@@ -7,9 +7,9 @@ namespace DeadInternet.Server.Interfaces
     {
         Task<Comment> GetCommentAsync(string Id);
         Task<Comment> CreatePromptAsync(string promptText, string postId);
-        Task CreateCommentsAsync(string promptText, string postId, string parentCommentId);
+        Task CreateCommentsAsync(CreateCommentDto createCommentDto);
         Task<List<CommentDto>> GetPostCommentsAsync(string postId);
-        CommentDto GetPromptDto(string postId);
+        Task<CommentDto> GetPromptDtoAsync(string postId);
         Task<List<CommentDto>> GetRepliesDtoAsync(string commentId);
         Task<PromptNRepliesDto> GetPromptNRepliesAsync(CommentDto promptDto);
         Task DeleteCommentChainAsync(string commentId);

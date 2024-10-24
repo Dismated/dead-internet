@@ -1,5 +1,6 @@
 ﻿using DeadInternet.Server.Dtos.Account;
 using DeadInternet.Server.Exceptions.Base;
+using DeadInternet.Server.Exceptions.User;
 using DeadInternet.Server.Interfaces;
 using DeadInternet.Server.Models;
 using Microsoft.AspNetCore.Identity;
@@ -60,7 +61,12 @@ namespace DeadInternet.Server.Services
             };
         }
 
-        public string GeneratePassword(int length = 12)
+        public string GeneratePassword()
+        {
+            return GeneratePassword(12);
+        }
+
+        public string GeneratePassword(int length)
         {
             const string chars = "abcdefghijklmnopqrstuvwxyz";
             const string numbers = "0123456789";
@@ -81,7 +87,7 @@ namespace DeadInternet.Server.Services
             return new string(result.OrderBy(x => random.Next()).ToArray());
         }
 
-        public RegisterDto CreateGuestAccountAsync()
+        public RegisterDto CreateGuestAccount()
         {
             string guestUsername = $"Guest_{Guid.NewGuid().ToString("N").Substring(0, 8)}";
             string guestPassword = GeneratePassword();
@@ -106,9 +112,8 @@ namespace DeadInternet.Server.Services
 
             if (!createResult.Succeeded)
             {
-                throw new Exception(
-                    "Failed to create guest user: "
-                        + string.Join(", ", createResult.Errors.Select(e => e.Description))
+                throw new UserCreationException(
+                    string.Join(", ", createResult.Errors.Select(e => e.Description))
                 );
             }
         }

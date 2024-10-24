@@ -1,4 +1,5 @@
 ﻿using DeadInternet.Server.Dtos.Comment;
+using DeadInternet.Server.Dtos.Common;
 using DeadInternet.Server.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ public class CommentController(
     public async Task<IActionResult> GetById([FromRoute] string id)
     {
         var comment = await _commentService.GetCommentAsync(id);
-        return Ok(_commentMapper.ToCommentDto(comment));
+        return Ok(new ApiResponse<CommentDto>(_commentMapper.ToCommentDto(comment)));
     }
 
     [Authorize]
@@ -28,7 +29,7 @@ public class CommentController(
     public async Task<IActionResult> GetPromptNRepliesByPostId([FromRoute] string postId)
     {
         var promptNReplies = await _postService.GetPostPageAsync(postId);
-        return Ok(promptNReplies);
+        return Ok(new ApiResponse<PromptNRepliesDto>(promptNReplies));
     }
 
     [Authorize]
@@ -36,7 +37,7 @@ public class CommentController(
     public async Task<IActionResult> DeleteCommentChain([FromRoute] string commentId)
     {
         await _commentService.DeleteCommentChainAsync(commentId);
-        return Ok(new { message = "Post deleted successfully" });
+        return Ok(new MessageResponse("Post deleted successfully!"));
     }
 
     [Authorize]
@@ -48,10 +49,18 @@ public class CommentController(
     {
         await _commentService.UpdateCommentAsync(commentId, comment.Content);
         var postId = await _postService.GetPostIdFromCommentAsync(commentId);
-        await _commentService.CreateCommentsAsync(comment.Content, postId, commentId);
+
+        var createCommentDto = new CreateCommentDto
+        {
+            PromptText = comment.Content,
+            PostId = postId,
+            ParentCommentId = commentId,
+        };
+
+        await _commentService.CreateCommentsAsync(createCommentDto);
         var replies = await _commentService.GetRepliesDtoAsync(commentId);
 
-        return Ok(replies);
+        return Ok(new ApiResponse<List<CommentDto>>(replies));
     }
 
     [Authorize]
@@ -60,8 +69,15 @@ public class CommentController(
     {
         var postId = await _postService.GetPostIdFromCommentAsync(replyDto.ParentCommentId);
         var replyId = await _commentService.CreateReplyAsync(replyDto, postId);
-        await _commentService.CreateCommentsAsync(replyDto.Content, postId, replyId);
 
-        return Ok(new { message = "Reply created successfully" });
+        var createCommentDto = new CreateCommentDto
+        {
+            PromptText = replyDto.Content,
+            PostId = postId,
+            ParentCommentId = replyId,
+        };
+        await _commentService.CreateCommentsAsync(createCommentDto);
+
+        return Ok(new MessageResponse("Reply created successfully!"));
     }
 }

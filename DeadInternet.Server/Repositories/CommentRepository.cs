@@ -54,12 +54,12 @@ namespace DeadInternet.Server.Repositories
             return [.. commentDto.Replies];
         }
 
-        public Comment? GetOldestByPostId(string postId)
+        public async Task<Comment?> GetOldestByPostIdAsync(string postId)
         {
-            return _context
+            return await _context
                 .Comments.Where(c => c.PostId == postId)
                 .OrderBy(c => c.CreatedAt)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
 
         public async Task<List<Comment>> GetRepliesAsync(string commentId)

@@ -1,30 +1,24 @@
-﻿using DeadInternet.Tests.MockData;
+﻿using DeadInternet.Server.Controllers;
+using DeadInternet.Server.Dtos.Account;
+using DeadInternet.Server.Dtos.Common;
+using DeadInternet.Server.Interfaces;
+using DeadInternet.Tests.MockData;
+using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 
 namespace DeadInternet.Tests.Controllers
 {
     public class AccountControllerTests
     {
-        private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly AccountController _controller;
         private readonly IAccountService _accountService;
 
         public AccountControllerTests()
         {
-            _userManager = Substitute.For<UserManager<AppUser>>(
-                Substitute.For<IUserStore<AppUser>>(),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-            );
             _accountService = Substitute.For<IAccountService>();
-            _controller = new AccountController(_accountService, _userManager);
+            _tokenService = Substitute.For<ITokenService>();
+            _controller = new AccountController(_accountService);
         }
 
         [Fact]
@@ -33,90 +27,56 @@ namespace DeadInternet.Tests.Controllers
             //Arrange
             var mockUser = UserMockData.GetMockNewAppUserDto();
             var mockLoginDto = UserMockData.GetMockLoginDto();
-            _accountService.GetUserByUsernameAsync(mockLoginDto).Returns(Task.FromResult(mockUser));
+            _accountService.GetVerifiedUserAsync(mockLoginDto).Returns(Task.FromResult(mockUser));
 
             //Act
             var result = await _controller.Login(mockLoginDto);
 
             //Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var dto = Assert.IsType<NewAppUserDto>(okResult.Value);
-            Assert.Equal(mockUser.Username, dto.Username);
-            Assert.Equal(mockUser.Email, dto.Email);
-            Assert.Equal(mockUser.Token, dto.Token);
+            var dto = Assert.IsType<ApiResponse<NewAppUserDto>>(okResult.Value);
+            Assert.Equal(mockUser, dto.Data);
         }
 
         [Fact]
-        public async Task Register_ReturnsStatusCode500_WhenUserAlreadyExists()
+        public async Task Register_ReturnsOk_WithMessage()
         {
             //Arrange
-            var description = "Username already exists!";
+            var message = "Account created successfully!";
             var mockRegisterDto = UserMockData.GetMockRegisterDto();
-            var error = new IdentityError { Description = description };
 
-            _userManager
-                .CreateAsync(Arg.Any<AppUser>(), Arg.Any<string>())
-                .Returns(Task.FromResult(IdentityResult.Failed(error)));
+            _accountService.CreateAccountAsync(mockRegisterDto).Returns(Task.CompletedTask);
 
             //Act
             var result = await _controller.Register(mockRegisterDto);
 
             //Assert
-            var objResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(500, objResult.StatusCode);
-            Assert.NotNull(objResult.Value);
-            Assert.Equal(description, ((List<IdentityError>)objResult.Value)[0].Description);
+            var objResult = Assert.IsType<OkObjectResult>(result);
+            var messageResult = Assert.IsType<MessageResponse>(objResult.Value);
+            Assert.Equal(message, messageResult.Message);
         }
 
         [Fact]
-        public async Task Register_ReturnsStatusCode500_WhenFailedToAssignRole()
+        public async Task LoginAsGuest_ReturnsOk_WithToken()
         {
             //Arrange
-            var mockUser = UserMockData.GetMockUser();
-            var mockregisterDto = UserMockData.GetMockRegisterDto();
-            var description = "Failed to assign role!";
-            var error = new IdentityError { Description = description };
-
-            _userManager
-                .CreateAsync(Arg.Any<AppUser>(), Arg.Any<string>())
-                .Returns(Task.FromResult(IdentityResult.Success));
-            _userManager
-                .AddToRoleAsync(Arg.Any<AppUser>(), Arg.Any<string>())
-                .Returns(Task.FromResult(IdentityResult.Failed(error)));
+            var mockRegisterDto = UserMockData.GetMockRegisterDto();
+            var mockUser = UserMockData.GetMockUser(mockRegisterDto);
+            var token = "FakeJwtToken";
+            _accountService.CreateGuestAccount().Returns(mockRegisterDto);
+            _accountService.CreateAccountAsync(mockRegisterDto).Returns(Task.CompletedTask);
+            _accountService
+                .GetUserByUsernameAsync(mockRegisterDto.Username)
+                .Returns(Task.FromResult(mockUser));
+            _accountService.CreateToken(mockUser).Returns(token);
 
             //Act
-            var result = await _controller.Register(mockregisterDto);
-
-            //Assert
-            var objResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(500, objResult.StatusCode);
-            Assert.NotNull(objResult.Value);
-            Assert.Equal(description, ((List<IdentityError>)objResult.Value)[0].Description);
-        }
-
-        [Fact]
-        public async Task Register_ReturnsOk_WithSuccessMessage()
-        {
-            //Arrange
-            var mockregisterDto = UserMockData.GetMockRegisterDto();
-            var appUser = new AppUser
-            {
-                Email = mockregisterDto.Email,
-                UserName = mockregisterDto.Username,
-            };
-            _userManager
-                .CreateAsync(Arg.Any<AppUser>(), Arg.Any<string>())
-                .Returns(Task.FromResult(IdentityResult.Success));
-            _userManager
-                .AddToRoleAsync(Arg.Any<AppUser>(), "User")
-                .Returns(Task.FromResult(IdentityResult.Success));
-
-            //Act
-            var result = await _controller.Register(mockregisterDto);
+            var result = await _controller.LoginAsGuest();
 
             //Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal("User created", okResult.Value);
+            var tokenResult = Assert.IsType<ApiResponse<TokenResponse>>(okResult.Value);
+            Assert.Equal(token, tokenResult.Data.Token);
         }
     }
 }

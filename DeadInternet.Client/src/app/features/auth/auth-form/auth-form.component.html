@@ -1,0 +1,19 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-2">
+  <app-form-input label="Username"
+                  formControlName="username"
+                  [error]="getErrorMessage('username')"
+                  [showError]="form.get('username')?.invalid && form.get('username')?.touched"></app-form-input>
+  <div *ngIf="formType === 'register'">
+    <app-form-input label="Email"
+                    formControlName="email"
+                    type="email"
+                    [error]="getErrorMessage('email')"
+                    [showError]="form.get('email')?.invalid && form.get('email')?.touched"></app-form-input>
+  </div>
+  <app-form-input label="Password"
+                  formControlName="password"
+                  type="password"
+                  [error]="getErrorMessage('password')"
+                  [showError]="form.get('password')?.invalid && form.get('password')?.touched"></app-form-input>
+  <app-button [submitType]="true" btnClass="btn btn-light mt-3 mb-2" [disabled]="form.invalid">{{submitButtonText()}}</app-button>
+</form>

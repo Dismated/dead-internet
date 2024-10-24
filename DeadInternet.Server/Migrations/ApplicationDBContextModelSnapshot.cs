@@ -22,30 +22,6 @@ namespace DeadInternet.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DeadInternet.Server.Models.AIPersonality", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Votes")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AIPersonalities");
-                });
-
             modelBuilder.Entity("DeadInternet.Server.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -147,9 +123,6 @@ namespace DeadInternet.Server.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AIPersonalityId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("AppUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -162,8 +135,6 @@ namespace DeadInternet.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AIPersonalityId");
 
                     b.HasIndex("AppUserId");
 
@@ -195,20 +166,6 @@ namespace DeadInternet.Server.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "4075c16c-22f6-45f4-bddf-b0ab2a7b6b5c",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "9c1ba571-fd7e-4980-8e97-55272b918fd9",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -336,10 +293,6 @@ namespace DeadInternet.Server.Migrations
 
             modelBuilder.Entity("DeadInternet.Server.Models.Post", b =>
                 {
-                    b.HasOne("DeadInternet.Server.Models.AIPersonality", null)
-                        .WithMany("Answers")
-                        .HasForeignKey("AIPersonalityId");
-
                     b.HasOne("DeadInternet.Server.Models.AppUser", "AppUser")
                         .WithMany("Posts")
                         .HasForeignKey("AppUserId")
@@ -398,11 +351,6 @@ namespace DeadInternet.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DeadInternet.Server.Models.AIPersonality", b =>
-                {
-                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("DeadInternet.Server.Models.AppUser", b =>

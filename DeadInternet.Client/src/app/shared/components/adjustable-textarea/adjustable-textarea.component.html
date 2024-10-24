@@ -1,0 +1,12 @@
+<textarea #textarea
+          [(ngModel)]="promptText"
+          class="form-control"
+          rows="1"
+          (keydown)="handleKeyDown($event)"
+          (ngModelChange)="onModelChange($event)"
+          name="promptText"
+          [placeholder]="placeholder"
+          style="overflow:hidden; resize:none;"
+          [ngStyle]="textareaStyles"
+          required>
+</textarea>

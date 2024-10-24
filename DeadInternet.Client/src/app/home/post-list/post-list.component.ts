@@ -1,15 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PostService } from '../features/services/post.service';
-import { Subscription, catchError, throwError, finalize } from 'rxjs';
-import { ErrorService } from '../core/services/error.service';
+import { PostService } from '../../features/services/post.service';
+import { Subscription, catchError, throwError } from 'rxjs';
+import { ErrorService } from '../../core/error-handling/error.service';
+import { PostData } from '../../models/post.model';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  selector: 'app-post-list',
+  templateUrl: './post-list.component.html',
+  styleUrl: './post-list.component.css'
 })
-export class HomeComponent implements OnInit, OnDestroy {
-  posts: any[] = []
+export class PostListComponent implements OnInit, OnDestroy {
+  posts: PostData['data'] = {} as PostData['data'];
   private subscriptions = new Subscription();
 
 
@@ -24,7 +25,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           return throwError(() => error);
         })
       ).subscribe(
-        res => this.posts = res
+        res => {
+          this.posts = res
+        }
       )
     );
   }

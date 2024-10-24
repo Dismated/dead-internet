@@ -30,22 +30,4 @@ export class ErrorService {
   getError(): Observable<ErrorMessage | null> {
     return this.errorSubject.asObservable();
   }
-
-  handleHttpError(error: any): void {
-    let errorMessage: string;
-    let errorDetails: string | undefined;
-
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Client Error: ${error.error.message}`;
-    } else {
-      errorMessage = `Server Error: ${error.status} ${error.statusText}`;
-      errorDetails = error.error?.message || error.message || 'Unknown error';
-    }
-
-    this.setError({ message: errorMessage, type: 'error', details: errorDetails });
-  }
-
-  logError(error: any): void {
-    console.error('Error logged:', error);
-  }
 }

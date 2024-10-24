@@ -2,8 +2,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommentsService } from "../features/services/comments.service";
-import { ErrorService } from '../core/services/error.service';
-import { Subscription, catchError } from 'rxjs';
+import { ErrorService } from '../core/error-handling/error.service';
+import { Subscription, catchError, finalize, throwError } from 'rxjs';
+import { Reply } from "../models/comment.model";
 
 
 @Component({
@@ -13,7 +14,7 @@ import { Subscription, catchError } from 'rxjs';
 })
 export class CommentsComponent implements OnInit, OnDestroy {
   postId: string | null = null
-  commentData: any = null
+  commentData: Reply[] = []
   promptText = ""
   private errorSubscription: Subscription | undefined;
 
@@ -36,14 +37,15 @@ export class CommentsComponent implements OnInit, OnDestroy {
           })
         ).subscribe(
           res => {
-            this.promptText = res.prompt.content;
-            this.commentData = res.replies;
+            this.promptText = res.data.prompt.content
+            this.commentData = res.data.replies;
 
           }
         ));
     }
     else {
       this.errorService.setErrorMessage('No post ID provided');
+      this.loading = false;
     }
   }
 
@@ -62,7 +64,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
       });
   }
 
-  private removeCommentRecursively(comments: any, commentId: string): boolean {
+  private removeCommentRecursively(comments: Reply[], commentId: string): boolean {
     for (let i = 0; i < comments.length; i++) {
       if (comments[i].id === commentId) {
         comments.splice(i, 1);

@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommentsService } from '../../features/services/comments.service';
-import { catchError, throwError } from 'rxjs';
-import { ErrorService } from '../../core/services/error.service';
+import { catchError, throwError, finalize } from 'rxjs';
+import { ErrorService } from '../../core/error-handling/error.service';
+import { Reply } from '../../models/comment.model';
 
 @Component({
   selector: 'app-comment',
@@ -9,44 +10,19 @@ import { ErrorService } from '../../core/services/error.service';
   styleUrl: './comment.component.css'
 })
 export class CommentComponent {
-  @Input() comment: any;
+  @Input() comment: Reply = {} as Reply
   @Input() depth: number = 0;
   @Output() deleteComment = new EventEmitter<string>();
 
-  isEditing: boolean = false;
-  editContent: string = '';
   isReplying: boolean = false;
   replyContent: string = '';
   isMinimized: boolean = false;
 
-  constructor(private commentsService: CommentsService, private errorService: ErrorService) { }
-
-  onEditClick() {
-    this.isEditing = true;
-    this.editContent = this.comment.content;
-  }
-
-  onSaveEdit() {
-    if (this.editContent.trim()) {
-      this.commentsService.editComment(this.comment.id, this.editContent).pipe(
-        catchError(error => {
-          this.errorService.setErrorMessage('Failed to update comment');
-          return throwError(() => error);
-        })
-      ).subscribe(() => {
-        this.comment.content = this.editContent;
-        this.isEditing = false;
-        window.location.reload();
-      });
-    }
-  }
-
-  onCancelEdit() {
-    this.isEditing = false;
-  }
+  constructor(private commentsService: CommentsService, private errorService: ErrorService, private cdr: ChangeDetectorRef) { }
 
   onReplyClick() {
     this.isReplying = true;
+    this.cdr.detectChanges()
   }
 
   onSaveReply() {

@@ -1,5 +1,8 @@
-﻿using DeadInternet.Tests.MockData;
+﻿using DeadInternet.Server.Services;
+using DeadInternet.Tests.MockData;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 using NSubstitute;
 
 namespace DeadInternet.Tests.Services
@@ -11,7 +14,6 @@ namespace DeadInternet.Tests.Services
         {
             //Arrange
             var mockCommentList = CommentMockData.GetMockCommentsList();
-            var mockCommentModel = LLMMockData.GetMockCreateCommentRequestDto();
 
             var chatCompletion = Substitute.For<IChatCompletionService>();
             chatCompletion
@@ -34,7 +36,7 @@ namespace DeadInternet.Tests.Services
             var LLMService = new LLMService(kernel);
 
             //Act
-            var result = await LLMService.GenerateCommentAsync(mockCommentModel);
+            var result = await LLMService.GenerateCommentAsync("This is a prompt!");
 
             //Assert
             Assert.Equal(mockCommentList, result);
